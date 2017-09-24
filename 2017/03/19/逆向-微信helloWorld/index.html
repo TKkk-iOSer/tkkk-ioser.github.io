@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS,逆向,微信," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言本篇主要制作微信的 tweak，实现在非越狱版的手机上进行 hello World 弹窗，从而熟悉 iOS 逆向相关的工具(不包含lldb远程调试、反汇编技术等)，以及了解 tweak 的主要流程(其实就是如何制作插件的过程)。">
+<meta name="keywords" content="iOS,逆向,微信">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS逆向-微信helloWorld">
+<meta property="og:url" content="http://yoursite.com/2017/03/19/逆向-微信helloWorld/index.html">
+<meta property="og:site_name" content="TKkk Notes">
+<meta property="og:description" content="前言本篇主要制作微信的 tweak，实现在非越狱版的手机上进行 hello World 弹窗，从而熟悉 iOS 逆向相关的工具(不包含lldb远程调试、反汇编技术等)，以及了解 tweak 的主要流程(其实就是如何制作插件的过程)。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-adef5e264d5bad8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-ce48a5803e5e6c33.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-4031611bc6710a9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-503cc428e16ac218.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-2a245ca9f43e31b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-301fc12dbaa0e8c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-cdca48c290f3ace2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-9a133bce9c59b562.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-4269d4c6241ec0f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-133336f434b7d1fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-ec0313e0def01dc3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-779ee64170495e9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-30bee467e5ec526d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-bacd4d58b44432e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-09-24T12:15:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS逆向-微信helloWorld">
+<meta name="twitter:description" content="前言本篇主要制作微信的 tweak，实现在非越狱版的手机上进行 hello World 弹窗，从而熟悉 iOS 逆向相关的工具(不包含lldb远程调试、反汇编技术等)，以及了解 tweak 的主要流程(其实就是如何制作插件的过程)。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/965383-adef5e264d5bad8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"ralways","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/19/逆向-微信helloWorld/"/>
+
+
+
+
+
+  <title>iOS逆向-微信helloWorld | TKkk Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">TKkk Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/19/逆向-微信helloWorld/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TKkk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TKkk Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS逆向-微信helloWorld</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-19T15:27:38+08:00">
+                2017-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇主要制作微信的 tweak，实现在非越狱版的手机上进行 hello World 弹窗，从而熟悉 iOS 逆向相关的工具(<del>不包含lldb远程调试、反汇编技术等</del>)，以及了解 tweak 的主要流程(<del>其实就是如何制作插件的过程</del>)。<br><a id="more"></a></p>
+<blockquote>
+<p>warm：本篇只是我在操作过程中的一点总结，并不深入讲解原理。若想深入了解可以查看<a href="https://book.douban.com/subject/26363333/" target="_blank" rel="external">iOS应用逆向工程 第2版</a>或者看文章最后的参考文档。</p>
+</blockquote>
+<ul>
+<li><p>基本原理： 通过 app 启动时调用我们注入的动态库，从而进行 hook 。而之所以能够执行我们注入的动态库，是因为使用了<code>mobilesubstrate</code> 这个库，这个库能在程序运行的时候动态加载我们注入动态库。而非越狱手机里面是没有的，所以我们需要直接将这个库打包进 ipa 中，使用它的 API 实现注入。<code>mobilesubstrate</code> 库在下面的 github 中有提供，即是<code>libsubstrate.dylib</code>.</p>
+</li>
+<li><p>本demo的github地址 : <a href="https://github.com/tusiji7/TKTweakDemo.git" target="_blank" rel="external">TKDemo</a><br>其中 /others 提供了 <code>libsubstrate.dylib</code> 与 本人写的 <code>autoInsertDylib.sh</code>脚本，<code>autoInsertDylib.sh</code>是用来实现注入动态库一体化。</p>
+</li>
+<li><p><strong><p id="p">以下部分工具(<del>例如 claa-dump 、insert_dylib</del>)可使用Xcode进行编译(command + b)，然后在工程目录下的Products中拷贝目标文件，放在 <code>/usr/local/bin</code> 目录中,方便在 Termimal 中使用。</p></strong></p>
+</li>
+<li><p><em>主要流程： 砸壳 ==&gt; 获取ipa ==&gt; 制作tweak ==&gt; 查看(更改)依赖库 ==&gt; 注入动态库 ==&gt; 打包重签名 ==&gt; 安装</em></p>
+</li>
+</ul>
+<hr>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="SSH-服务"><a href="#SSH-服务" class="headerlink" title="SSH  服务"></a>SSH  服务</h3><blockquote>
+<p>实现在越狱手机上远程进行ssh服务</p>
+</blockquote>
+<p>OpenSSH 在 Cydia 中安装 OpenSSH</p>
+<ul>
+<li>ssh : 远程登录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 指令 ssh user@iOSIP</div><div class="line">$ ssh mobile@192.168.1.6</div></pre></td></tr></table></figure>
+<ul>
+<li>scp : 远程拷贝<br>本地文件拷贝到iOS上(iOS拷贝到本地则相反)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 指令 scp /path/to/localFile user@iOSIP:/path/to/remoteFile</div><div class="line">scp ~/Desktop/1.png root@192.168.1.6:/var/tmp/</div></pre></td></tr></table></figure>
+<p><strong>注意，OpenSSH 默认登录密码为 <a>alpine</a> ，iOS 上的用户只有 root 与 mobile，修改密码使用<code>passwd root（mobile）</code></strong></p>
+<hr>
+<h3 id="砸壳"><a href="#砸壳" class="headerlink" title="砸壳"></a>砸壳</h3><blockquote>
+<p>用来在越狱手机上获取ipa</p>
+</blockquote>
+<p><strong>PS:可直接使用<a href="http://pro.25pp.com/pp_mac_ios" target="_blank" rel="external">PP助手</a>下载越狱版本的 ipa 文件(<del>我就是这么懒得</del>)</strong></p>
+<p><a href="https://github.com/KJCracks/Clutch" target="_blank" rel="external">Cluth</a></p>
+<ul>
+<li>下载并得到执行文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git clone https://github.com/KJCracks/Clutch</div><div class="line">$ cd Clutch</div><div class="line">// 使用 Xcode 进行build，得到可执行文件</div><div class="line">$ xcodebuild -project Clutch.xcodeproj -configuration Release ARCHS=&quot;armv7 armv7s arm64&quot; build</div></pre></td></tr></table></figure>
+<ul>
+<li>将可执行文件通过 ssh 拷贝到手机</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp Clutch/clutch root@&lt;your.device.ip&gt;:/usr/bin/</div></pre></td></tr></table></figure>
+<ul>
+<li>先 ssh 到越狱手机上，<code>clutch -i</code>列出当前安装的应用,再使用<code>clutch -d 序列号(或者bundle id)</code>进行砸壳</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ssh root@&lt;your.device.ip&gt;</div><div class="line">$ clutch -i // 列出当前安装的应用</div><div class="line">$ clutch -d bundle id (序列号) // 砸壳</div></pre></td></tr></table></figure>
+<p>clutch 将砸过后的 ipa 文件放到了<code>/private/var/mobile/Documents/Dumped/</code></p>
+<ul>
+<li>拷贝到桌面</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ scp root@&lt;your.device.ip&gt;:/private/var/mobile/Documents/Dumped/xx.ipa ~/Desktop</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="导头文件（查看-app-相关头文件的信息）"><a href="#导头文件（查看-app-相关头文件的信息）" class="headerlink" title="导头文件（查看 app 相关头文件的信息）"></a>导头文件（查看 app 相关头文件的信息）</h3><blockquote>
+<p>dump 目标对象的 class 信息的工具。</p>
+</blockquote>
+<p><a href="http://stevenygard.com/projects/class-dump/" target="_blank" rel="external">class-dump</a></p>
+<p>将 demo.app 的头文件导出到<code>~/Document/headers/</code>中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">class-dump -S -s -H demo.app -o ~/Document/headers/</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="制作-dylib-动态库"><a href="#制作-dylib-动态库" class="headerlink" title="制作 dylib 动态库"></a>制作 dylib 动态库</h3><blockquote>
+<p>制作我们要注入的 dylib 动态库   </p>
+</blockquote>
+<p>本文章使用的是 <a href="https://github.com/theos/theos" target="_blank" rel="external">theos</a></p>
+<p>PS:也可以使用<a href="http://iosopendev.com/" target="_blank" rel="external">iOSOpenDev</a></p>
+<blockquote>
+<p>iOSOpenDev 集成在 Xcode 中，提供了一些模板，可直接使用 Xcode 进行开发。只是这个工具停止更新，对高版本的 Xcode 不能很好地支持。本人装了多次老是失败，虽然最后在 Xcode 中有看到该工具，也不确定是否安装成功。若装失败可参考<a href="https://github.com/kokoabim/iOSOpenDev/wiki" target="_blank" rel="external">iOSOpenDev Wiki</a></p>
+</blockquote>
+<h4 id="安装并配置-theos"><a href="#安装并配置-theos" class="headerlink" title="安装并配置 theos"></a>安装并配置 theos</h4><p>从 github 下载至<code>opt/theos/</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">brew install dpkg ldid</div><div class="line"></div><div class="line">export THEOS=/opt/theos</div><div class="line">sudo git clone --recursive https://github.com/theos/theos.git $THEOS</div><div class="line">sudo chown -R $(id -u):$(id -g) /opt/theos</div></pre></td></tr></table></figure>
+<p>可<a>配置环境变量</a>,<code>vi ~/.bash_profile</code>,在 <a>.bash_profile</a> 文件的最后加入(<del>否则每次重启Terminal都要重新export</del>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export PATH=/opt/theos/bin:$PATH</div><div class="line">export THEOS=/opt/theos</div></pre></td></tr></table></figure>
+<h4 id="创建tweak"><a href="#创建tweak" class="headerlink" title="创建tweak"></a>创建tweak</h4><p>使用 <code>nic.pl</code> 创建 tweak<br><del>若提示无此命令请根据上一步骤配置环境变量，或者不嫌麻烦使用<code>/opt/theos/bin/nic.pl</code></del><br>根据提示选择 <a>iphone/tweak</a>，接着分别输入</p>
+<ul>
+<li>项目名</li>
+<li>该 deb 包的名字（<del>类似 bundle identifier, 此 bundle identifier 与要 hook 的 app 的 bundle identifier 不是同一个</del>）</li>
+<li>作者</li>
+<li>tweak 作用对象的 bundle identifier（<del>比如微信为com.tencent.xin</del>）</li>
+<li>tweak 安装完成后需要重启的应用名。（<del>比如微信为WeChat</del>）</li>
+</ul>
+<p>如下所示：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-adef5e264d5bad8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建 tweak.png"></p>
+<p>完成后会看到四个文件(<del>make 后将生成 .theos 、obj 文件夹</del>).<br><code>Makefile          TKDemo.plist  Tweak.xm          control</code></p>
+<ul>
+<li><a>Makefile</a> : 工程用到的文件、框架、库等信息。<br>该文件过于简单，还需要添加一些信息。如<br>指定处理器架构<code>ARCHS = armv7 arm64</code><br>指定SDK版本<code>TARGET = iphone:latest:8.0</code><br>导入所需的framework等等。<br>修改后的Makefile文件如下所示：<br><img src="http://upload-images.jianshu.io/upload_images/965383-ce48a5803e5e6c33.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Makefile modified.png"></li>
+</ul>
+<ul>
+<li><a>TKDemo.plist</a> 该文件中的 Bundles : 指定 bundle 为 tweak 的作用对象。也可添加多个 bundle, 指定多个为 tweak 作用对象。<br><img src="http://upload-images.jianshu.io/upload_images/965383-4031611bc6710a9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="plist.png"></li>
+</ul>
+<ul>
+<li><a>control</a> ： 该 tweak 所需的基本信息 (<del>其实大部分都是刚刚创建 tweak 所填写的信息啦</del>)<br><img src="http://upload-images.jianshu.io/upload_images/965383-503cc428e16ac218.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="control.png"></li>
+</ul>
+<ul>
+<li><a>Tweak.xm</a>：重点文件，用来编写 hook 代码,因为支持<code>Logos</code>和<code>C/C++</code>语法，可以让我们不用去写一些 runtime 方法(<del>必要时候还是要写</del>)从而进行 hook 。<blockquote>
+<p>.x 文件支持Logos语法，.xm 文件支持Logos和C/C++语法。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Logos-常用语法"><a href="#Logos-常用语法" class="headerlink" title="Logos 常用语法"></a>Logos 常用语法</h4><ul>
+<li><code>%hook</code><br>  指定需要 hook 的类，以<code>%end</code>结尾。</li>
+<li><code>%orig</code><br>  在 <code>%hook</code> 内部使用，执行 hook 住的方法原代码。</li>
+<li><code>%new</code><br>   在<code>%hook</code>的内部使用，给 class 添加新方法，与<code>class_addMethod</code>相同。<br>   与 Category 中添加方法的区别：Category 为编译时添加，<code>class_addMethod</code> 为动态添加。<br><strong>warm ：添加的方法需要在 @interface 中进行声明</strong></li>
+<li><code>%c</code><br>获取一个类，等同于<code>objc_getClass</code>、<code>NSClassFromString</code>  </li>
+</ul>
+<blockquote>
+<p><code>%hook</code>、<code>%log</code>、<code>%orig</code> 等都是 <code>mobilesubstrate</code> 的 <code>MobileHooker</code> 模块提供的宏，除此之外还有 <code>%group</code> <code>%init</code>、 <code>%ctor</code>等,其实也就是把 <code>method swizzling</code> 相关的方法封装成了各种宏标记，若想深入了解，请左转 <a href="www.google.com">Google</a>       </p>
+</blockquote>
+<h4 id="编写-tweak-xm"><a href="#编写-tweak-xm" class="headerlink" title="编写 tweak.xm"></a>编写 tweak.xm</h4><p>熟悉各种语法之后便可以进行编写代码了，其中<code>MMUIViewController</code>为微信的基础的ViewController。我们通过 hook <code>viewDidApper:</code> 来进行 hello World 弹窗。<br><img src="http://upload-images.jianshu.io/upload_images/965383-2a245ca9f43e31b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tweak.xm.png"></p>
+<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><p>使用<code>make</code>进行编译<br>若想重新编译记得先<code>make clean</code><br><code>make</code>后在当前文件夹下面将生成两个文件夹:<code>.theos</code> 与 <code>obj</code>,其中我们编译完成的动态库就在<code>.thoes/obj/debug</code>的下面，与工程名相同。</p>
+<p><strong>若编译的时候提示找不到 <code>common.mk</code> 或者是 <code>tweak.mk</code>，请根据上述步骤（<a>4.1 安装并配置 theos</a>）重新 export theos，或写入至~/.bash_profile，或更改Makefile的文件，将<code>$(THEOS)/makefiles</code> 与 <code>$(THEOS_MAKE_PATH)</code> 替换成<code>opt/theos/makefiles</code></strong><br><img src="http://upload-images.jianshu.io/upload_images/965383-301fc12dbaa0e8c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="make.png"></p>
+<hr>
+<h3 id="查看（修改）依赖"><a href="#查看（修改）依赖" class="headerlink" title="查看（修改）依赖"></a>查看（修改）依赖</h3><h4 id="otool"><a href="#otool" class="headerlink" title="otool"></a>otool</h4><blockquote>
+<p>查看执行文件所依赖的库文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">otool -L TKDemo.dylib</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-cdca48c290f3ace2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="查看依赖库.png"></p>
+<p>若发现有依赖 <code>/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate</code> 使用 install_name_tool 更改依赖。</p>
+<blockquote>
+<p>CydiaSubstrate 只有越狱的手机上才有，因此需要我们手动更改并导入。</p>
+</blockquote>
+<hr>
+<h4 id="更换动态库的依赖"><a href="#更换动态库的依赖" class="headerlink" title="更换动态库的依赖"></a>更换动态库的依赖</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">install_name_tool -change /Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate @loader_path/libsubstrate.dylib tkchat.dylib  </div><div class="line">// install_name_tool -change 需要替换的库 @loader_path/需要引用的库 需要更改的dylib</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-9a133bce9c59b562.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="替换依赖库.png"></p>
+<hr>
+<h3 id="动态库注入"><a href="#动态库注入" class="headerlink" title="动态库注入"></a>动态库注入</h3><blockquote>
+<p>把我们写的动态库注入到要 hook 的二进制文件</p>
+</blockquote>
+<p><a href="https://github.com/gengjf/insert_dylib" target="_blank" rel="external">insert_dylib</a></p>
+<p><strong>先将 ipa 文件解压，在解压后的<code>/Payload</code>目录中，将app可执行文件拷贝出来。再将我们编写的动态库与libsubstrate.dylib 拷贝至app的包内容中。</strong><br>执行命令：<br><code>./insert_dylib 动态库路径 目标二进制文件</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./insert_dylib @executable_path/xxxx.dylib xxxx</div><div class="line">// @executable_path 是一个环境变量，指的是二进制文件所在的路径</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-4269d4c6241ec0f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="注入动态库.png"><br><del>之所以能够不使用./是因为已经将 insert_dylib 导入到/usr/local/bin目录中</del><br><strong>注入成功后将app目录中的 WeChat 删除，将 WeChat_patched 改为WeChat。</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-133336f434b7d1fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="替换二进制文件.png"></p>
+<p><strong>warm ：使用 insert_dylib 时若出现 error 记得修改权限， <code>chmod 777 insert_dylib</code></strong></p>
+<hr>
+<h3 id="打包、重签名、安装"><a href="#打包、重签名、安装" class="headerlink" title="打包、重签名、安装"></a>打包、重签名、安装</h3><p>使用图形化打包签名工具 <a href="https://github.com/DanTheMan827/ios-app-signer" target="_blank" rel="external">ios-app-signer</a></p>
+<blockquote>
+<p>选择相应的证书与 Provisioning Profile 文件进行打包。</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-ec0313e0def01dc3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="打包重签名.png"></p>
+<p><del>友情提示：如果证书没有支持 watch，请删除 app 中的<a>watch</a>相关的文件。</del></p>
+<p>证书的话可以用 Xcode 新建个 Project (<del>个人开发者证书7天后过期</del>)，在手机上运行下即可生成。导入时记得到真机上需要有相应的Provisioning Profile 文件。可在 Xcode-Window-Devices，双指点击设备查看Provisioning Profile文件，点击下面的 <code>+</code> 进行安装。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-779ee64170495e9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Devices.png"></p>
+<p>也可使用<a href="http://pro.25pp.com/pp_mac_ios" target="_blank" rel="external">PP助手</a>进行安装。</p>
+<hr>
+<h3 id="hello-World"><a href="#hello-World" class="headerlink" title="hello World"></a>hello World</h3><blockquote>
+<p>最后就是我们的 hello World</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-30bee467e5ec526d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hello World.png"></p>
+<hr>
+<h3 id="autoInsertDylib-sh-脚本"><a href="#autoInsertDylib-sh-脚本" class="headerlink" title="autoInsertDylib.sh 脚本"></a>autoInsertDylib.sh 脚本</h3><blockquote>
+<p>由于以上的操作(查看更改依赖库、注入动态库)都类似且繁琐，个人懒癌，就写了这个sh。</p>
+</blockquote>
+<p><a>warm !!!</a><br><a>warm !!!</a><br><a>warm !!!</a><br><strong>该脚本的中<code>insert_dylib</code>路径使用的是<code>/usr/local/bin</code>(<del>请看前言</del>),请根据自身环境更改脚本中的<code>insert_dylib</code>路径，以免错误。</strong></p>
+<p><strong><code>iOS App Singer</code> 本人放在了<code>/Applications/</code>中，若Applications中没有，则在脚本执行完手动打开。</strong></p>
+<p>使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./autoInsertDylib.sh ipa路径 libsubstrate.dylib路径 要注入的dylib路径</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-bacd4d58b44432e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="autoInsertDylib 操作.png"></p>
+<p>autoInsertDylib.sh 内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> !/bin/bash</div><div class="line"></div><div class="line">SOURCEIPA="$1"</div><div class="line">LIBSUBSTRATE="$2"</div><div class="line">DYLIB="$3"</div><div class="line"></div><div class="line">if [ ! -d ~/Desktop/tk-tweak-temp-folder/ ]; then</div><div class="line">	echo "在 Desktop 创建tk-tweak-temp-folder"</div><div class="line">	mkdir ~/Desktop/tk-tweak-temp-folder</div><div class="line"></div><div class="line">else</div><div class="line">	rm -rf ~/Desktop/tk-tweak-temp-folder/*</div><div class="line">fi</div><div class="line"></div><div class="line">cp "$SOURCEIPA" "$DYLIB" "$LIBSUBSTRATE" ~/Desktop/tk-tweak-temp-folder/</div><div class="line"></div><div class="line">echo "正将" $&#123;SOURCEIPA##*/&#125; $&#123;DYLIB##*/&#125; $&#123;LIBSUBSTRATE##*/&#125;  "拷贝至~/Desktop/tk-tweak-temp-folder"</div><div class="line"></div><div class="line">cd ~/Desktop/tk-tweak-temp-folder/</div><div class="line"></div><div class="line"></div><div class="line">otool -L $&#123;DYLIB##*/&#125; &gt; depend.log</div><div class="line">grep "/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate" depend.log &gt;grep_result.log</div><div class="line">if [ $? -eq 0 ]; then</div><div class="line">    echo "发现有依赖于 CydiaSubstrate, 正将其替换为 libsubstrate"</div><div class="line">	install_name_tool -change /Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate @loader_path/libsubstrate.dylib $&#123;DYLIB##*/&#125;</div><div class="line"></div><div class="line">else</div><div class="line">    echo "没有发现依赖于CydiaSubstrate"</div><div class="line">fi</div><div class="line"></div><div class="line">echo "解压" $&#123;SOURCEIPA##*/&#125;</div><div class="line"></div><div class="line">unzip -qo "$SOURCEIPA" -d extracted</div><div class="line"></div><div class="line">APPLICATION=$(ls extracted/Payload/)</div><div class="line"></div><div class="line">cp -R ~/Desktop/tk-tweak-temp-folder/extracted/Payload/$APPLICATION ~/Desktop/tk-tweak-temp-folder/</div><div class="line"></div><div class="line">echo "注入" $&#123;DYLIB##*/&#125; "到" $APPLICATION</div><div class="line">cp $&#123;DYLIB##*/&#125; $&#123;LIBSUBSTRATE##*/&#125; $APPLICATION/</div><div class="line"></div><div class="line">echo "删除" $&#123;APPLICATION##*/&#125; "中 watch 相关文件"</div><div class="line"></div><div class="line">rm -rf ~/Desktop/tk-tweak-temp-folder/$APPLICATION/*watch*</div><div class="line">rm -rf ~/Desktop/tk-tweak-temp-folder/$APPLICATION/*Watch*</div><div class="line"></div><div class="line">echo "是否注入" $&#123;DYLIB##*/&#125; ":(Y/N)"</div><div class="line"></div><div class="line">insert_dylib  @executable_path/$&#123;DYLIB##*/&#125; $APPLICATION/$&#123;APPLICATION%.*&#125; &gt; insert_dylib.log</div><div class="line"></div><div class="line">echo "注入成功"</div><div class="line">cd $APPLICATION</div><div class="line"></div><div class="line">rm -rf $&#123;APPLICATION%.*&#125;</div><div class="line">mv $&#123;APPLICATION%.*&#125;_patched $&#123;APPLICATION%.*&#125;</div><div class="line"></div><div class="line">echo "正将"  $&#123;APPLICATION%.*&#125;_patched "覆盖为" $&#123;APPLICATION%.*&#125;</div><div class="line"></div><div class="line">cd ~/Desktop/tk-tweak-temp-folder/</div><div class="line"></div><div class="line">echo "删除临时文件"</div><div class="line"></div><div class="line">rm -rf $&#123;SOURCEIPA##*/&#125; $&#123;DYLIB##*/&#125; $&#123;LIBSUBSTRATE##*/&#125; extracted insert_dylib.log depend.log grep_result.log</div><div class="line"></div><div class="line">echo "打开 tk-tweak-temp-folder 文件夹"</div><div class="line">open ~/Desktop/tk-tweak-temp-folder</div><div class="line">open /Applications/iOS\ App\ Signer.app</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是整个 iOS 逆向的主要流程(<del>虽然hook的代码很渣</del>),其中注入动态库与打包重签名的工具不止一种，可以根据自己的爱好网上查找。本人也是踩了不少坑不断摸索来的，比如由于tweak工程名的问题，导致使用 <code>iOS App Signer</code> 打包重签名的一直error：<a><br>Error verifying code signature</a>。希望能给刚入iOS 逆向坑的人一点帮助，文章中如有错误欢迎指出。由于涉及只是工具的使用，涉及到的原理比较薄弱，若想深入了解可以去阅读下参考文档。</p>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="https://book.douban.com/subject/26363333/" target="_blank" rel="external">iOS应用逆向工程 第2版</a></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653577384&amp;idx=1&amp;sn=b44a9c9651bf09c5bea7e0337031c53c&amp;scene=0#wechat_redirect" target="_blank" rel="external">移动App入侵与逆向破解技术－iOS篇</a></p>
+<p><a href="http://yulingtianxia.com/blog/2017/02/28/Make-WeChat-Great-Again/" target="_blank" rel="external">Make WeChat Great Again</a></p>
+<p><a href="http://yulingtianxia.com/blog/2017/03/06/How-to-hook-the-correct-method-in-reverse-engineering/" target="_blank" rel="external">如何在逆向工程中 Hook 得更准 - 微信屏蔽好友&amp;群消息实战</a></p>
+<p><a href="http://yulingtianxia.com/blog/2016/05/06/Let-your-WeChat-for-Mac-never-revoke-messages/" target="_blank" rel="external">让你的微信不再被人撤回消息</a></p>
+<p><a href="http://www.swiftyper.com/2016/12/26/wechat-redenvelop-tweak-for-non-jailbroken-iphone/" target="_blank" rel="external">免越狱版 iOS 插件</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+      
+        
+
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------------------------------------ 我是有底线的 ------------------------------------</div>
+
+
+      
+    </div>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/逆向/" rel="tag"># 逆向</a>
+          
+            <a href="/tags/微信/" rel="tag"># 微信</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/07/Xcode中常用的第三方插件和小工具/" rel="next" title="Xcode中常用的第三方插件和小工具">
+                <i class="fa fa-chevron-left"></i> Xcode中常用的第三方插件和小工具
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/21/震惊-macOS版微信竟可以这样消息防撤回/" rel="prev" title="震惊！ macOS 版微信竟可以这样消息防撤回">
+                震惊！ macOS 版微信竟可以这样消息防撤回 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/avatar.jpg"
+              alt="TKkk" />
+          
+            <p class="site-author-name" itemprop="name">TKkk</p>
+            <p class="site-description motion-element" itemprop="description">只是做了一些微小的事情</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/TKkk-iOSer" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:tkkk14@qq.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-服务"><span class="nav-number">2.1.</span> <span class="nav-text">SSH  服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#砸壳"><span class="nav-number">2.2.</span> <span class="nav-text">砸壳</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导头文件（查看-app-相关头文件的信息）"><span class="nav-number">2.3.</span> <span class="nav-text">导头文件（查看 app 相关头文件的信息）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#制作-dylib-动态库"><span class="nav-number">2.4.</span> <span class="nav-text">制作 dylib 动态库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装并配置-theos"><span class="nav-number">2.4.1.</span> <span class="nav-text">安装并配置 theos</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建tweak"><span class="nav-number">2.4.2.</span> <span class="nav-text">创建tweak</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Logos-常用语法"><span class="nav-number">2.4.3.</span> <span class="nav-text">Logos 常用语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编写-tweak-xm"><span class="nav-number">2.4.4.</span> <span class="nav-text">编写 tweak.xm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编译"><span class="nav-number">2.4.5.</span> <span class="nav-text">编译</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看（修改）依赖"><span class="nav-number">2.5.</span> <span class="nav-text">查看（修改）依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#otool"><span class="nav-number">2.5.1.</span> <span class="nav-text">otool</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更换动态库的依赖"><span class="nav-number">2.5.2.</span> <span class="nav-text">更换动态库的依赖</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态库注入"><span class="nav-number">2.6.</span> <span class="nav-text">动态库注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打包、重签名、安装"><span class="nav-number">2.7.</span> <span class="nav-text">打包、重签名、安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hello-World"><span class="nav-number">2.8.</span> <span class="nav-text">hello World</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#autoInsertDylib-sh-脚本"><span class="nav-number">2.9.</span> <span class="nav-text">autoInsertDylib.sh 脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TKkk</span>
+
+  
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

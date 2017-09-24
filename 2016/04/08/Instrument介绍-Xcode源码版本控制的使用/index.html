@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Xcode,Instrument,工具," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Instrument工具介绍与使用 Instrument是性能分析、动态跟踪和分析OS X和iOS代码的测试工具。它是一个灵活的和强大的工具，可以让您追踪程序运行的过程，收集数据，并检查所收集的数据。">
+<meta name="keywords" content="Xcode,Instrument,工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Instrument介绍、Xcode源码版本控制的使用">
+<meta property="og:url" content="http://yoursite.com/2016/04/08/Instrument介绍-Xcode源码版本控制的使用/index.html">
+<meta property="og:site_name" content="TKkk Notes">
+<meta property="og:description" content="Instrument工具介绍与使用 Instrument是性能分析、动态跟踪和分析OS X和iOS代码的测试工具。它是一个灵活的和强大的工具，可以让您追踪程序运行的过程，收集数据，并检查所收集的数据。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-a1f1b143a0d9c817.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-2edd928785704525.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://developer.apple.com/library/mac/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/Art/instruments_inspector_pane_navigation_bar_2x.png">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-913cde0d8d46c5bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-708ee3fbe239a5df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-0e3ba4c99c0d7e92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-2757f63dc7d927f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-68512140a5809e28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-b10ca294269850db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-95ef9d30e4b5e5c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-b71222d169b660d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-e39d759e5dd13cba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-b1ea0d5d84e71488.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-aaa07d60f44bdfa2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-98eb25d7056fa602.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-be2d17ad2fdb4ecd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-b71ade77112545a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-7e0ff906b4e14108.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-03bd31f448c55572.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-3eff56dcee6b6ffc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-09-24T12:16:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Instrument介绍、Xcode源码版本控制的使用">
+<meta name="twitter:description" content="Instrument工具介绍与使用 Instrument是性能分析、动态跟踪和分析OS X和iOS代码的测试工具。它是一个灵活的和强大的工具，可以让您追踪程序运行的过程，收集数据，并检查所收集的数据。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/965383-a1f1b143a0d9c817.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"ralways","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/04/08/Instrument介绍-Xcode源码版本控制的使用/"/>
+
+
+
+
+
+  <title>Instrument介绍、Xcode源码版本控制的使用 | TKkk Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">TKkk Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/08/Instrument介绍-Xcode源码版本控制的使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TKkk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TKkk Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Instrument介绍、Xcode源码版本控制的使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-08T16:45:26+08:00">
+                2016-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Instrument工具介绍与使用"><a href="#Instrument工具介绍与使用" class="headerlink" title="Instrument工具介绍与使用"></a>Instrument工具介绍与使用</h2><blockquote>
+<p>Instrument是性能分析、动态跟踪和分析OS X和iOS代码的测试工具。它是一个灵活的和强大的工具，可以让您追踪程序运行的过程，收集数据，并检查所收集的数据。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="界面"><a href="#界面" class="headerlink" title="界面"></a>界面</h3><p><img src="http://upload-images.jianshu.io/upload_images/965383-a1f1b143a0d9c817.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>1.追踪代码中的（甚至是那些难以复制的）问题；</p>
+<p>2.分析程序的性能；</p>
+<p>3.实现程序的自动化测试；</p>
+<p>4.部分实现程序的压力测试；</p>
+<p>5.执行系统级别的通用问题追踪调试；</p>
+<p>6.使你对程序的内部运行过程更加了解。</p>
+<h3 id="常用的Instrument模板"><a href="#常用的Instrument模板" class="headerlink" title="常用的Instrument模板"></a>常用的Instrument模板</h3><p>Leaks（泄漏）：一般的措施内存使用情况，检查泄漏的内存，并提供了所有活动的分配和泄漏模块的类对象分配统计信息以及内存地址历史记录；</p>
+<p>Allocations（内存分配）：跟踪过程的匿名虚拟内存和堆的对象提供类名和可选保留/释放历史；</p>
+<p>Time Profiler（时间探查）：执行对系统的CPU上运行的进程低负载时间为基础采样。</p>
+<p>Activity Monitor（活动监视器）：显示器处理的CPU、内存和网络使用情况统计；</p>
+<p>Automation（自动化）：这个模板执行它模拟用户界面交互为IOS机应用从instrument启动的脚本；</p>
+<h3 id="工具界面"><a href="#工具界面" class="headerlink" title="工具界面"></a>工具界面</h3><p><img src="http://upload-images.jianshu.io/upload_images/965383-2edd928785704525.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>1、这里控制记录过程，点击红色的”记录”按钮可以停止或开始当前正在分析的app（在记录和停止按钮之间切换），暂停键，如你所想，暂停当前正在运行的app。</p>
+<p>2、这里是执行计时器（run timer），计时器记录着正在分析的app执行了多长时间、执行了多少次。如果你使用记录控制按钮来停止你的app，然后重启，这将创建一个新的运行记录，同时会显示”Run 2 of 2”。</p>
+<p>3、这里被称作路径（track），就你选择的Time Profiler工具而言，因为只有一个工具，所以这里只有一条路径，关于这里显示的图标的详情，一会你就会在接下来的教程中了解更多。</p>
+<p>4、这里是详情面板，展示的是你正在使用的工具的主要信息。就现在而言，这里展示的是最”笨重（hottest）”的方法–换句话说，占用CPU时间最长的方法。点击上方的bar会看到Call Tree（左手边的那个）并选中Sample List，然后你会看到数据的不同视图，视图展示了每一个示例。点击其中几个，你会在Extended Detail inspector中看到被捕获的堆栈跟踪。</p>
+<p>5、这里是检查器（inspector）面板，一共有三个检查器：record setting（记录设置），display setting（展示设置），还有extends detail（扩展详情）。一会你将了解更多关于这里面的一些选项。</p>
+<p><img src="https://developer.apple.com/library/mac/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/Art/instruments_inspector_pane_navigation_bar_2x.png" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-913cde0d8d46c5bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="Call-Tree各个选项和功能"><a href="#Call-Tree各个选项和功能" class="headerlink" title="Call Tree各个选项和功能"></a>Call Tree各个选项和功能</h3><p>Separate by Thread: 每个线程应该分开考虑。只有这样你才能揪出那些大量占用CPU的”重”线程  </p>
+<p>Invert Call Tree: 从上倒下跟踪堆栈,这意味着你看到的表中的方法,将已从第0帧开始取样,这通常你是想要的,只有这样你才能看到CPU中花费时间最深的方法.也就是说FuncA{FunB{FunC}} 勾选此项后堆栈以C-&gt;B-A 把调用层级最深的C显示在最外面</p>
+<p>Hide Missing Symbols: 如果dSYM无法找到你的app或者系统框架的话,那么表中看不到方法名只能看到十六进制的数值,如果勾线此项可以隐藏这些符号,便于简化数据</p>
+<p>Hide System Libraries: 勾选此项你会显示你app的代码,这是非常有用的. 因为通常你只关心cpu花在自己代码上的时间不是系统上的</p>
+<p>Show Obj-C Only: 只显示oc代码 ,如果你的程序是像OpenGl这样的程序,不要勾选侧向因为他有可能是C++的  </p>
+<p>Flatten Recursion: 递归函数, 每个堆栈跟踪一个条目</p>
+<p>Top Functions: 一个函数花费的时间直接在该函数中的总和，以及在函数调用该函数所花费的时间的总时间。因此，如果函数A调用B，那么A的时间报告在A花费的时间加上B.花费的时间,这非常真有用，因为它可以让你每次下到调用堆栈时挑最大的时间数字，归零在你最耗时的方法。</p>
+<font color="#FF6347">现介绍下 Leak 工具的使用</font>
+
+<h3 id="Leak-的使用"><a href="#Leak-的使用" class="headerlink" title="Leak 的使用"></a>Leak 的使用</h3><p>1.选择Leaks选项</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-708ee3fbe239a5df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>2.选中设备–app,之后点击红点运行.</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-0e3ba4c99c0d7e92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>3.由于Leaks是动态监测，所以我们需要手动操作APP,一边操作，一边观察Leaks的变化，当出现红色叉时，就监测到了内存泄露，点击右上角的暂停按钮，进行暂停检测(也可继续检测，当多个时暂停，一次处理了多个).如图所示:</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-2757f63dc7d927f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>4.下面就是定位修改了,此时选中有红色叉的Leaks，下面有个”田”字方格，点开，选中Call Tree。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-68512140a5809e28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>显示如下图界面<br><img src="http://upload-images.jianshu.io/upload_images/965383-b10ca294269850db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>5.下面就是最关键的一步，在这个界面的右下角有若干选框，选中Invert Call Tree 和Hide System Libraries,（红圈范围内）显示如下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-95ef9d30e4b5e5c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>6.定位<br>在详情面板选中显示的若干条中的一条，双击，会自动跳到内存泄露代码处，然后点击右上角 Xcode 图标进行修改。如图所示<br><img src="http://upload-images.jianshu.io/upload_images/965383-b71222d169b660d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-e39d759e5dd13cba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="Xcode上源码版本控制的使用"><a href="#Xcode上源码版本控制的使用" class="headerlink" title="Xcode上源码版本控制的使用"></a>Xcode上源码版本控制的使用</h2><p>从 Xcode5 开始引入了使用 git 的一些新特性。它将 git 的各项功能整合到一个菜单中，并提供子菜单来进行软件合并的控制。菜单如下图所示。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-b1ea0d5d84e71488.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>其中功能包括创建分支、切换分支、合并分支、提交(Commit)、撤销修改(Discard Changes)、Pull、查看历史。   </p>
+<pre><code>由于不知道什么原因，无法验证远程仓库的账号和密码。故无法使用Push操作…
+</code></pre><h3 id="分支的操作"><a href="#分支的操作" class="headerlink" title="分支的操作"></a>分支的操作</h3><h4 id="新建分支"><a href="#新建分支" class="headerlink" title="新建分支"></a>新建分支</h4><p>选择 New Branch ，填写所要新建的分支名称，输入完成系统将会自动切换到所新建的分支。</p>
+<h4 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h4><p>选择 Switch to Branch ，在新窗口可以看到本地和远程所有的分支，选择所要切换的分支(默认不显示当前分支)，点击 Switch 即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-aaa07d60f44bdfa2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h4><p>选择 Merge from Branch，选择将要合并的分支，点击 Merge 即可。</p>
+<h3 id="提交-Commit"><a href="#提交-Commit" class="headerlink" title="提交(Commit)"></a>提交(Commit)</h3><p>选择 Commit ,可看到如下图所示的窗口界面。左边为项目中状态发生改变的文件，<code>M</code>表示修改，<code>A</code>表示新添加。中间部分为选定文件的当前版本和前一个版本的对比。下面为此处 commit 的描述信息。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-98eb25d7056fa602.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="撤销修改-Discard-Changes"><a href="#撤销修改-Discard-Changes" class="headerlink" title="撤销修改(Discard Changes)"></a>撤销修改(Discard Changes)</h3><h4 id="Discard-All-Changes"><a href="#Discard-All-Changes" class="headerlink" title="Discard All Changes"></a>Discard All Changes</h4><p>当选择 Discard All Changes 时，可以将撤销当前工程的所有修改。恢复到当前版本最初状态。</p>
+<h4 id="Discard-Change-in-“文件名”"><a href="#Discard-Change-in-“文件名”" class="headerlink" title="Discard Change in “文件名”"></a>Discard Change in “文件名”</h4><p>当选中某个文件，可以撤销该文件的所有修改，恢复到当前版本最初状态。</p>
+<h3 id="Pull-和查看历史"><a href="#Pull-和查看历史" class="headerlink" title="Pull 和查看历史"></a>Pull 和查看历史</h3><p>当选择 Pull，可以从远程仓库获取最新内容。</p>
+<p>选择 History，可以查看当前工程的版本信息.点击右边的 show xx modified files,可查看修改了哪些文件。<br><img src="http://upload-images.jianshu.io/upload_images/965383-be2d17ad2fdb4ecd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="Show-the-Version-Editor"><a href="#Show-the-Version-Editor" class="headerlink" title="Show the Version Editor"></a>Show the Version Editor</h3><p>选择Xcode工具栏上方的版本控制编辑，可以看到当前版本和之前版本的对比。<br><img src="http://upload-images.jianshu.io/upload_images/965383-b71ade77112545a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">   </p>
+<p>若想查看之前某个版本的文件状态，可以切换下方的文件版本进行查看。<br><img src="http://upload-images.jianshu.io/upload_images/965383-7e0ff906b4e14108.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>右边滚动条的横线为文件所修改的地方。<br><img src="http://upload-images.jianshu.io/upload_images/965383-03bd31f448c55572.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>若想恢复文件到某个版本，先切换到想回复的版本，点击中间的数字，选择 Discard Change 即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-3eff56dcee6b6ffc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://developer.apple.com/library/mac/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/index.html#//apple_ref/doc/uid/TP40004652-CH3-SW1" target="_blank" rel="external">Instruments User Guide</a><br><a href="http://www.jianshu.com/p/f87455e47da1" target="_blank" rel="external">小白学习instrument</a><br><a href="http://www.cocoachina.com/swift/20150623/12237.html" target="_blank" rel="external">如何使用Instruments诊断App（Swift版）：起步</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+      
+        
+
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------------------------------------ 我是有底线的 ------------------------------------</div>
+
+
+      
+    </div>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Xcode/" rel="tag"># Xcode</a>
+          
+            <a href="/tags/Instrument/" rel="tag"># Instrument</a>
+          
+            <a href="/tags/工具/" rel="tag"># 工具</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/08/Xcode快捷操作以及Behavior/" rel="next" title="Xcode快捷操作以及Behavior">
+                <i class="fa fa-chevron-left"></i> Xcode快捷操作以及Behavior
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/07/Xcode中常用的第三方插件和小工具/" rel="prev" title="Xcode中常用的第三方插件和小工具">
+                Xcode中常用的第三方插件和小工具 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/avatar.jpg"
+              alt="TKkk" />
+          
+            <p class="site-author-name" itemprop="name">TKkk</p>
+            <p class="site-description motion-element" itemprop="description">只是做了一些微小的事情</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/TKkk-iOSer" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:tkkk14@qq.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Instrument工具介绍与使用"><span class="nav-number">1.</span> <span class="nav-text">Instrument工具介绍与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#界面"><span class="nav-number">1.1.</span> <span class="nav-text">界面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">1.2.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的Instrument模板"><span class="nav-number">1.3.</span> <span class="nav-text">常用的Instrument模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工具界面"><span class="nav-number">1.4.</span> <span class="nav-text">工具界面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Call-Tree各个选项和功能"><span class="nav-number">1.5.</span> <span class="nav-text">Call Tree各个选项和功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Leak-的使用"><span class="nav-number">1.6.</span> <span class="nav-text">Leak 的使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Xcode上源码版本控制的使用"><span class="nav-number">2.</span> <span class="nav-text">Xcode上源码版本控制的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分支的操作"><span class="nav-number">2.1.</span> <span class="nav-text">分支的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建分支"><span class="nav-number">2.1.1.</span> <span class="nav-text">新建分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#切换分支"><span class="nav-number">2.1.2.</span> <span class="nav-text">切换分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#合并分支"><span class="nav-number">2.1.3.</span> <span class="nav-text">合并分支</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提交-Commit"><span class="nav-number">2.2.</span> <span class="nav-text">提交(Commit)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#撤销修改-Discard-Changes"><span class="nav-number">2.3.</span> <span class="nav-text">撤销修改(Discard Changes)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Discard-All-Changes"><span class="nav-number">2.3.1.</span> <span class="nav-text">Discard All Changes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Discard-Change-in-“文件名”"><span class="nav-number">2.3.2.</span> <span class="nav-text">Discard Change in “文件名”</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pull-和查看历史"><span class="nav-number">2.4.</span> <span class="nav-text">Pull 和查看历史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Show-the-Version-Editor"><span class="nav-number">2.5.</span> <span class="nav-text">Show the Version Editor</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TKkk</span>
+
+  
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

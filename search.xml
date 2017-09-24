@@ -1,0 +1,881 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+    
+    <entry>
+      <title><![CDATA[震惊！ macOS 版微信竟可以这样消息防撤回]]></title>
+      <url>/2017/04/21/%E9%9C%87%E6%83%8A-macOS%E7%89%88%E5%BE%AE%E4%BF%A1%E7%AB%9F%E5%8F%AF%E4%BB%A5%E8%BF%99%E6%A0%B7%E6%B6%88%E6%81%AF%E9%98%B2%E6%92%A4%E5%9B%9E/</url>
+      <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前一阵子入了 <a href="http://www.jianshu.com/p/04495a429324" target="_blank" rel="external">iOS 逆向</a>的坑，整了个微信机器人，不过由于是用自己的证书打包，因此只能用7天，之后还得重新打包，实在麻烦。于是就拿 macOS 动刀了。   </p>
+<p>本篇主要制作 macOS 版微信的插件，实现<strong>消息防撤回与自动回复</strong>的功能，从而熟悉 mac OS 插件制作,由于 <del>(lan ai)</del> macOS 逆向分析与 iOS 类似，且不像 iOS 有那么多的工具，因此花费的时间较多，这里暂不阐述。<del>之后有时间再整理 iOS 逆向分析过程。</del><br><a id="more"></a></p>
+<ul>
+<li>基本原理：与 iOS 注入动态库类似，通过 app 启动时调用我们注入的库，从而进行 hook。</li>
+<li>插件 GitHub 地址:<a href="https://github.com/tusiji7/WeChatPlugin" target="_blank" rel="external">WeChatPlugin-MacOS</a></li>
+</ul>
+<hr>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><ul>
+<li>消息自动回复</li>
+<li>消息防撤回</li>
+<li>远程控制</li>
+<li>微信多开</li>
+<li>第二次登录免认证</li>
+<li>置底功能(<del>类似置顶</del>)</li>
+</ul>
+<p>远程控制：</p>
+<ul>
+<li style="list-style: none"><input type="checkbox" checked> 屏幕保护</li>
+<li style="list-style: none"><input type="checkbox" checked> 清空废纸篓</li>
+<li style="list-style: none"><input type="checkbox" checked> 锁屏、休眠、关机、重启</li>
+<li style="list-style: none"><input type="checkbox" checked> 退出QQ、WeChat、Chrome、Safari、所有程序</li>
+<li style="list-style: none"><input type="checkbox" checked> 网易云音乐(播放、暂停、下一首、上一首、喜欢、取消喜欢)</li>
+</ul>
+<p><strong>若想使用远程控制网易云音乐，请在“系统偏好设置 ==&gt; 安全性与隐私 ==&gt; 隐私 ==&gt; 辅助功能”中添加微信</strong></p>
+<hr>
+<h3 id="Demo-演示"><a href="#Demo-演示" class="headerlink" title="Demo 演示"></a>Demo 演示</h3><ul>
+<li><p>消息防撤回<br><img src="http://upload-images.jianshu.io/upload_images/965383-30cbea645661e627.gif?imageMogr2/auto-orient/strip" alt="消息防撤回.gif"></p>
+</li>
+<li><p>自动回复<br><img src="http://upload-images.jianshu.io/upload_images/965383-d488dce3696ba1b3.gif?imageMogr2/auto-orient/strip" alt="自动回复.gif"></p>
+</li>
+<li><p>微信多开<br><img src="http://upload-images.jianshu.io/upload_images/965383-51d8eae02d48fda9.gif?imageMogr2/auto-orient/strip" alt="微信多开.gif"></p>
+</li>
+<li><p>远程控制 (测试关闭Chrome、QQ、开启屏幕保护)<br><img src="http://upload-images.jianshu.io/upload_images/965383-0cf50d9b22b02f2f.gif?imageMogr2/auto-orient/strip" alt="远程控制.gif"></p>
+</li>
+<li><p>免认证 &amp; 置底<br><img src="http://upload-images.jianshu.io/upload_images/965383-cc656af55cc2d2f6.gif?imageMogr2/auto-orient/strip" alt="免认证&amp;置底"></p>
+</li>
+</ul>
+<hr>
+<h3 id="安装-amp-卸载"><a href="#安装-amp-卸载" class="headerlink" title="安装 &amp; 卸载"></a>安装 &amp; 卸载</h3><p><del>第一次安装需要输入密码，仅是为了获取写入微信文件夹的权限</del></p>
+<h4 id="懒癌版安装-适合非程序猿"><a href="#懒癌版安装-适合非程序猿" class="headerlink" title="懒癌版安装(适合非程序猿)"></a>懒癌版安装(适合非程序猿)</h4><p>打开<code>应用程序-实用工具-Terminal(终端)</code>，执行以下命令并根据提示输入密码即可。</p>
+<p><code>cd ~/Downloads &amp;&amp; git clone https://github.com/TKkk-iOSer/WeChatPlugin-MacOS.git &amp;&amp; ./WeChatPlugin-MacOS/Other/Install.sh</code></p>
+<h4 id="普通安装"><a href="#普通安装" class="headerlink" title="普通安装"></a>普通安装</h4><ul>
+<li>下载WeChatPlugin，用 Termimal 打开项目当前目录，执行 <code>./Other/Install.sh</code>即可。</li>
+</ul>
+<h4 id="若想修改源码-amp-重编译"><a href="#若想修改源码-amp-重编译" class="headerlink" title="若想修改源码&amp;重编译"></a>若想修改源码&amp;重编译</h4><ul>
+<li>先更改微信的 owner 以获取写入微信文件夹的权限，否则会出现类似<strong>Permission denied</strong>的错误。</li>
+</ul>
+<p><code>sudo chown -R $(whoami) /Applications/WeChat.app</code></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-11e4480553ba086e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Permission denied.png"></p>
+<ul>
+<li><p>下载 WeChatPlugin, 用Xcode打开，先进行 Build (<code>command + B</code>)，之后 Run (<code>command + R</code>)即可启动微信，此时插件注入完成。</p>
+</li>
+<li><p>若 Error，提示找不到 Framework，先进行 Build。</p>
+</li>
+</ul>
+<h4 id="安装完成"><a href="#安装完成" class="headerlink" title="安装完成"></a>安装完成</h4><ul>
+<li>登录微信，在<strong>菜单栏</strong>中看到<strong>微信小助手</strong>即安装成功。<br><img src="http://upload-images.jianshu.io/upload_images/965383-0f65bb05dabf961b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="微信小助手.png"></li>
+</ul>
+<h4 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h4><p>在<code>Terminal</code>(终端)打开该项目，运行 <code>./Other/Uninstall.sh</code> 即可</p>
+<hr>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
+<li>消息防撤回：点击<code>开启消息防撤回</code>或者快捷键<code>command + t</code>,即可开启、关闭。</li>
+<li>自动回复：点击<code>开启自动回复</code>或者快捷键<code>conmand + k</code>，将弹出自动回复设置的窗口，点击红色箭头的按钮设置开关。    </li>
+</ul>
+<blockquote>
+<p>若关键字为 <code>*</code>，则任何信息都回复；<br>若关键字为<code>x|y</code>,则 x 和 y 都回复；<br>若关键字<strong>或者</strong>自动回复为空，则不开启该条自动回复。<br>若开启正则，请确认正则表达式书写正确，<a href="http://tool.oschina.net/regex/" target="_blank" rel="external">在线正则表达式测试</a></p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-5aa2fd8fadc545c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="自动回复设置.png"></p>
+<ul>
+<li><p>微信多开：点击<code>登录新微信</code>或者快捷键<code>command + shift + n</code>,即可多开微信。</p>
+</li>
+<li><p>远程控制：点击<code>远程控制 Mac OS</code>或者快捷键<code>command + shift + c</code>,即可打开控制窗口。</p>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-9c67894ee7092600.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=".png"></p>
+<p>①为选择是否开启远程控制此功能。   </p>
+<p>②为能够触发远程控制的消息内容(仅向自己发送账号有效)。</p>
+<hr>
+<h2 id="plugin-制作"><a href="#plugin-制作" class="headerlink" title="plugin 制作"></a>plugin 制作</h2><h3 id="创建Framework"><a href="#创建Framework" class="headerlink" title="创建Framework"></a>创建Framework</h3><p>使用 Xcode 创建 macOS 的 Cocoa Framework.</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-f975dee2f0c956f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建Cocoa Framework.png"></p>
+<h3 id="Edit-Scheme…"><a href="#Edit-Scheme…" class="headerlink" title="Edit Scheme…"></a>Edit Scheme…</h3><p>编辑 Scheme，在 Debug 模式下启动 WeChat。<br><img src="http://upload-images.jianshu.io/upload_images/965383-26dbb068acb8998f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Edit Scheme.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-7fbd4dc6e8d161dc.gif?imageMogr2/auto-orient/strip" alt="choose executable.gif"></p>
+<h3 id="添加Run-Script"><a href="#添加Run-Script" class="headerlink" title="添加Run Script"></a>添加Run Script</h3><p>在 Build Phases 中添加 Run Script</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-c4c94d035b7def3c.gif?imageMogr2/auto-orient/strip" alt="add run scripe.gif"></p>
+<p>Script 内容如下</p>
+<p>其中 <code>app_name</code>为要注入的app名称，framework_name`为插件名称。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment"># 要注入的的app</span></div><div class="line">app_name=<span class="string">"WeChat"</span></div><div class="line"><span class="comment"># 此framework名字</span></div><div class="line">framework_name=<span class="string">"WeChatPlugin"</span></div><div class="line">app_bundle_path=<span class="string">"/Applications/<span class="variable">$&#123;app_name&#125;</span>.app/Contents/MacOS"</span></div><div class="line">app_executable_path=<span class="string">"<span class="variable">$&#123;app_bundle_path&#125;</span>/<span class="variable">$&#123;app_name&#125;</span>"</span></div><div class="line">app_executable_backup_path=<span class="string">"<span class="variable">$&#123;app_executable_path&#125;</span>_backup"</span></div><div class="line">framework_path=<span class="string">"<span class="variable">$&#123;app_bundle_path&#125;</span>/<span class="variable">$&#123;framework_name&#125;</span>.framework"</span></div><div class="line"><span class="comment"># 备份WeChat原始可执行文件</span></div><div class="line"><span class="keyword">if</span> [ ! -f <span class="string">"<span class="variable">$app_executable_backup_path</span>"</span> ]</div><div class="line"><span class="keyword">then</span></div><div class="line">cp <span class="string">"<span class="variable">$app_executable_path</span>"</span> <span class="string">"<span class="variable">$app_executable_backup_path</span>"</span></div><div class="line"><span class="keyword">fi</span></div><div class="line">cp -r <span class="string">"<span class="variable">$&#123;BUILT_PRODUCTS_DIR&#125;</span>/<span class="variable">$&#123;framework_name&#125;</span>.framework"</span> <span class="variable">$&#123;app_bundle_path&#125;</span></div><div class="line"><span class="comment"># 注入动态库</span></div><div class="line">./insert_dylib --all-yes <span class="string">"<span class="variable">$&#123;framework_path&#125;</span>/<span class="variable">$&#123;framework_name&#125;</span>"</span> <span class="string">"<span class="variable">$app_executable_backup_path</span>"</span> <span class="string">"<span class="variable">$app_executable_path</span>"</span></div></pre></td></tr></table></figure>
+<p><strong>其中insert_dylib来源于<a href="https://github.com/Tyilo/insert_dylib" target="_blank" rel="external">github</a>(<del>与iOS的insert_dylib不同</del>)</strong></p>
+<h3 id="创建-main-mm"><a href="#创建-main-mm" class="headerlink" title="创建 main.mm"></a>创建 main.mm</h3><p>创建 main.mm 文件，添加构造方法。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-bd6a3a36c065a8b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="main.mm.png"></p>
+<p>此时，一运行，即可执行<code>initalize</code>中的方法,并启动微信。</p>
+<p><strong>因此，我们就可以在这里愉快的进行hook！！！</strong></p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a><strong>注意</strong></h3><ul>
+<li>若 Error，提示无权限，请对 WeChat 赋予权限。<br><code>sudo chmod -R 777 /Applications/WeChat.app</code></li>
+<li>若 Error，提示找不到 Framework，先进行 Build。</li>
+</ul>
+<h2 id="愉快的-hook-以撤回消息为例"><a href="#愉快的-hook-以撤回消息为例" class="headerlink" title="愉快的 hook (以撤回消息为例)"></a>愉快的 hook (以撤回消息为例)</h2><h3 id="创建-NSObject-分类"><a href="#创建-NSObject-分类" class="headerlink" title="创建 NSObject 分类"></a>创建 NSObject 分类</h3><p>新建 NSObject 分类，加入类方法<code>+(void)hookWeChat;</code>并在 main.mm 中执行该方法。之后所有的 hook 都可以在该类方法中进行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#import &quot;WeChat+hook.h&quot;</div><div class="line"></div><div class="line">static void __attribute__((constructor)) initialize(void) &#123;</div><div class="line">    NSLog(@&quot;++++++++ WeChatPlugin loaded ++++++++&quot;);</div><div class="line">    [NSObject hook_WeChat];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="寻找注入点"><a href="#寻找注入点" class="headerlink" title="寻找注入点"></a>寻找注入点</h3><p>首先使用<code>class-dump</code>,dump 出微信的头文件信息。<del>(如何使用请左转<a href="http://www.jianshu.com/p/04495a429324" target="_blank" rel="external">iOS 逆向 - 微信 helloWorld</a>)</del><br>因为在 iOS 中，微信撤回的函数为<code>- (void)onRevokeMsg:(id)arg1;</code>因此，我们在微信的头文件中搜索该方法，最终在<code>MessageService.h</code>中找到。</p>
+<h3 id="runtime-登场"><a href="#runtime-登场" class="headerlink" title="runtime 登场"></a>runtime 登场</h3><p>到这里就要开始进行 hook 了，在<code>+(void)hookWeChat;</code>中进行<code>methodExchange</code>。<br>将<code>MessageService</code>的<code>- (void)onRevokeMsg:(id)arg1;</code>方法实现替换成<code>NSObject</code>的<code>- (void)hook_onRevokeMsg:(id)msg</code>方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">+ (void)hookWeChat &#123;</div><div class="line">    //      微信撤回消息</div><div class="line">    Method originalMethod = class_getInstanceMethod(objc_getClass(&quot;MessageService&quot;), @selector(onRevokeMsg:));</div><div class="line">    Method swizzledMethod = class_getInstanceMethod([self class], @selector(hook_onRevokeMsg:));</div><div class="line">    if(originalMethod &amp;&amp; swizzledMethod) &#123;</div><div class="line">        method_exchangeImplementations(originalMethod, swizzledMethod);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)hook_onRevokeMsg:(id)msg &#123;</div><div class="line">    NSLog(@&quot;=== TK-LOG-msg = %@===&quot;,msg);</div><div class="line">    [self hook_onRevokeMsg:msg];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>由于是使用 Xcode，就不用像 iOS 逆向那样只能用 lldb 调试了。可以在<code>- (void)hook_onRevokeMsg:(id)msg</code>中打个断点，然后撤回消息看是否会触发。结果证明该方法确实是微信消息撤回的处理方法。</p>
+<h3 id="使用-Hopper-Disassembler"><a href="#使用-Hopper-Disassembler" class="headerlink" title="使用 Hopper Disassembler"></a>使用 Hopper Disassembler</h3><p>接着我们在<code>- (void)hook_onRevokeMsg:(id)msg</code>中直接<code>return</code>就可以了。<br>然而这时候看不到到底是撤回了哪一条信息。我们可以在用户撤回的时候将下面的内容改成”拦截 xx 的一条撤回消息：xxxx”。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-3ca5031305263ca2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="撤回.png"></p>
+<p>这时候就要使用神器 <code>Hopper Disassembler</code>.用<code>hopper Disassembler</code> 进行分析，分析<code>- (void)onRevokeMsg:(id)arg1;</code>的实现。<del>(分析过程与 iOS 类似，这里暂不阐述)</del><br>最终得到了主要的代码实现。<del>（完整代码在工程中）</del></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">MessageService *msgService = [[objc_getClass(&quot;MMServiceCenter&quot;) defaultCenter] getService:objc_getClass(&quot;MessageService&quot;)];</div><div class="line">MessageData *revokeMsgData = [msgService GetMsgData:session svrId:[newmsgid integerValue]];</div><div class="line">MessageData *newMsgData = (&#123;</div><div class="line">        MessageData *msg = [[objc_getClass(&quot;MessageData&quot;) alloc] initWithMsgType:0x2710];</div><div class="line">        [msg setFromUsrName:revokeMsgData.toUsrName];</div><div class="line">        [msg setToUsrName:revokeMsgData.fromUsrName];</div><div class="line">        [msg setMsgStatus:4];</div><div class="line">        [msg setMsgContent:newMsgContent];</div><div class="line">        [msg setMsgCreateTime:[revokeMsgData msgCreateTime]];</div><div class="line">        [msg setMesLocalID:[revokeMsgData mesLocalID]];</div><div class="line"></div><div class="line">        msg;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">[msgService AddLocalMsg:session msgData:newMsgData];</div></pre></td></tr></table></figure>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><p>点击<code>菜单栏-帮助-开启消息防撤回</code>，当好友撤回消息是可以看到提示。<br><img src="http://upload-images.jianshu.io/upload_images/965383-30cbea645661e627.gif?imageMogr2/auto-orient/strip" alt="消息防撤回.gif"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>最终我们得到了拥有消息防撤回与自动回复的 macOS 版微信，虽然整个过程挺简单的，但主要目标是为了熟悉了如何制作 macOS 插件的过程，这样以后就可以给 macOS 上的 app 增加点小功能了。</p>
+<p>由于本人还只是个逆向新手，难免会有所疏漏，还请大牛们指正。<br>本项目仅供学习参考。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.iosre.com/t/mac/7014/2" target="_blank" rel="external">如何愉快地在Mac上刷朋友圈</a></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> 逆向 </tag>
+            
+            <tag> 微信 </tag>
+            
+            <tag> macOS </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[iOS逆向-微信helloWorld]]></title>
+      <url>/2017/03/19/%E9%80%86%E5%90%91-%E5%BE%AE%E4%BF%A1helloWorld/</url>
+      <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇主要制作微信的 tweak，实现在非越狱版的手机上进行 hello World 弹窗，从而熟悉 iOS 逆向相关的工具(<del>不包含lldb远程调试、反汇编技术等</del>)，以及了解 tweak 的主要流程(<del>其实就是如何制作插件的过程</del>)。<br><a id="more"></a></p>
+<blockquote>
+<p>warm：本篇只是我在操作过程中的一点总结，并不深入讲解原理。若想深入了解可以查看<a href="https://book.douban.com/subject/26363333/" target="_blank" rel="external">iOS应用逆向工程 第2版</a>或者看文章最后的参考文档。</p>
+</blockquote>
+<ul>
+<li><p>基本原理： 通过 app 启动时调用我们注入的动态库，从而进行 hook 。而之所以能够执行我们注入的动态库，是因为使用了<code>mobilesubstrate</code> 这个库，这个库能在程序运行的时候动态加载我们注入动态库。而非越狱手机里面是没有的，所以我们需要直接将这个库打包进 ipa 中，使用它的 API 实现注入。<code>mobilesubstrate</code> 库在下面的 github 中有提供，即是<code>libsubstrate.dylib</code>.</p>
+</li>
+<li><p>本demo的github地址 : <a href="https://github.com/tusiji7/TKTweakDemo.git" target="_blank" rel="external">TKDemo</a><br>其中 /others 提供了 <code>libsubstrate.dylib</code> 与 本人写的 <code>autoInsertDylib.sh</code>脚本，<code>autoInsertDylib.sh</code>是用来实现注入动态库一体化。</p>
+</li>
+<li><p><strong><p id="p">以下部分工具(<del>例如 claa-dump 、insert_dylib</del>)可使用Xcode进行编译(command + b)，然后在工程目录下的Products中拷贝目标文件，放在 <code>/usr/local/bin</code> 目录中,方便在 Termimal 中使用。</p></strong></p>
+</li>
+<li><p><em>主要流程： 砸壳 ==&gt; 获取ipa ==&gt; 制作tweak ==&gt; 查看(更改)依赖库 ==&gt; 注入动态库 ==&gt; 打包重签名 ==&gt; 安装</em></p>
+</li>
+</ul>
+<hr>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="SSH-服务"><a href="#SSH-服务" class="headerlink" title="SSH  服务"></a>SSH  服务</h3><blockquote>
+<p>实现在越狱手机上远程进行ssh服务</p>
+</blockquote>
+<p>OpenSSH 在 Cydia 中安装 OpenSSH</p>
+<ul>
+<li>ssh : 远程登录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 指令 ssh user@iOSIP</div><div class="line">$ ssh mobile@192.168.1.6</div></pre></td></tr></table></figure>
+<ul>
+<li>scp : 远程拷贝<br>本地文件拷贝到iOS上(iOS拷贝到本地则相反)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 指令 scp /path/to/localFile user@iOSIP:/path/to/remoteFile</div><div class="line">scp ~/Desktop/1.png root@192.168.1.6:/var/tmp/</div></pre></td></tr></table></figure>
+<p><strong>注意，OpenSSH 默认登录密码为 <a>alpine</a> ，iOS 上的用户只有 root 与 mobile，修改密码使用<code>passwd root（mobile）</code></strong></p>
+<hr>
+<h3 id="砸壳"><a href="#砸壳" class="headerlink" title="砸壳"></a>砸壳</h3><blockquote>
+<p>用来在越狱手机上获取ipa</p>
+</blockquote>
+<p><strong>PS:可直接使用<a href="http://pro.25pp.com/pp_mac_ios" target="_blank" rel="external">PP助手</a>下载越狱版本的 ipa 文件(<del>我就是这么懒得</del>)</strong></p>
+<p><a href="https://github.com/KJCracks/Clutch" target="_blank" rel="external">Cluth</a></p>
+<ul>
+<li>下载并得到执行文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git clone https://github.com/KJCracks/Clutch</div><div class="line">$ cd Clutch</div><div class="line">// 使用 Xcode 进行build，得到可执行文件</div><div class="line">$ xcodebuild -project Clutch.xcodeproj -configuration Release ARCHS=&quot;armv7 armv7s arm64&quot; build</div></pre></td></tr></table></figure>
+<ul>
+<li>将可执行文件通过 ssh 拷贝到手机</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp Clutch/clutch root@&lt;your.device.ip&gt;:/usr/bin/</div></pre></td></tr></table></figure>
+<ul>
+<li>先 ssh 到越狱手机上，<code>clutch -i</code>列出当前安装的应用,再使用<code>clutch -d 序列号(或者bundle id)</code>进行砸壳</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ ssh root@&lt;your.device.ip&gt;</div><div class="line">$ clutch -i // 列出当前安装的应用</div><div class="line">$ clutch -d bundle id (序列号) // 砸壳</div></pre></td></tr></table></figure>
+<p>clutch 将砸过后的 ipa 文件放到了<code>/private/var/mobile/Documents/Dumped/</code></p>
+<ul>
+<li>拷贝到桌面</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ scp root@&lt;your.device.ip&gt;:/private/var/mobile/Documents/Dumped/xx.ipa ~/Desktop</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="导头文件（查看-app-相关头文件的信息）"><a href="#导头文件（查看-app-相关头文件的信息）" class="headerlink" title="导头文件（查看 app 相关头文件的信息）"></a>导头文件（查看 app 相关头文件的信息）</h3><blockquote>
+<p>dump 目标对象的 class 信息的工具。</p>
+</blockquote>
+<p><a href="http://stevenygard.com/projects/class-dump/" target="_blank" rel="external">class-dump</a></p>
+<p>将 demo.app 的头文件导出到<code>~/Document/headers/</code>中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">class-dump -S -s -H demo.app -o ~/Document/headers/</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="制作-dylib-动态库"><a href="#制作-dylib-动态库" class="headerlink" title="制作 dylib 动态库"></a>制作 dylib 动态库</h3><blockquote>
+<p>制作我们要注入的 dylib 动态库   </p>
+</blockquote>
+<p>本文章使用的是 <a href="https://github.com/theos/theos" target="_blank" rel="external">theos</a></p>
+<p>PS:也可以使用<a href="http://iosopendev.com/" target="_blank" rel="external">iOSOpenDev</a></p>
+<blockquote>
+<p>iOSOpenDev 集成在 Xcode 中，提供了一些模板，可直接使用 Xcode 进行开发。只是这个工具停止更新，对高版本的 Xcode 不能很好地支持。本人装了多次老是失败，虽然最后在 Xcode 中有看到该工具，也不确定是否安装成功。若装失败可参考<a href="https://github.com/kokoabim/iOSOpenDev/wiki" target="_blank" rel="external">iOSOpenDev Wiki</a></p>
+</blockquote>
+<h4 id="安装并配置-theos"><a href="#安装并配置-theos" class="headerlink" title="安装并配置 theos"></a>安装并配置 theos</h4><p>从 github 下载至<code>opt/theos/</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">brew install dpkg ldid</div><div class="line"></div><div class="line">export THEOS=/opt/theos</div><div class="line">sudo git clone --recursive https://github.com/theos/theos.git $THEOS</div><div class="line">sudo chown -R $(id -u):$(id -g) /opt/theos</div></pre></td></tr></table></figure>
+<p>可<a>配置环境变量</a>,<code>vi ~/.bash_profile</code>,在 <a>.bash_profile</a> 文件的最后加入(<del>否则每次重启Terminal都要重新export</del>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export PATH=/opt/theos/bin:$PATH</div><div class="line">export THEOS=/opt/theos</div></pre></td></tr></table></figure>
+<h4 id="创建tweak"><a href="#创建tweak" class="headerlink" title="创建tweak"></a>创建tweak</h4><p>使用 <code>nic.pl</code> 创建 tweak<br><del>若提示无此命令请根据上一步骤配置环境变量，或者不嫌麻烦使用<code>/opt/theos/bin/nic.pl</code></del><br>根据提示选择 <a>iphone/tweak</a>，接着分别输入</p>
+<ul>
+<li>项目名</li>
+<li>该 deb 包的名字（<del>类似 bundle identifier, 此 bundle identifier 与要 hook 的 app 的 bundle identifier 不是同一个</del>）</li>
+<li>作者</li>
+<li>tweak 作用对象的 bundle identifier（<del>比如微信为com.tencent.xin</del>）</li>
+<li>tweak 安装完成后需要重启的应用名。（<del>比如微信为WeChat</del>）</li>
+</ul>
+<p>如下所示：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-adef5e264d5bad8d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="创建 tweak.png"></p>
+<p>完成后会看到四个文件(<del>make 后将生成 .theos 、obj 文件夹</del>).<br><code>Makefile          TKDemo.plist  Tweak.xm          control</code></p>
+<ul>
+<li><a>Makefile</a> : 工程用到的文件、框架、库等信息。<br>该文件过于简单，还需要添加一些信息。如<br>指定处理器架构<code>ARCHS = armv7 arm64</code><br>指定SDK版本<code>TARGET = iphone:latest:8.0</code><br>导入所需的framework等等。<br>修改后的Makefile文件如下所示：<br><img src="http://upload-images.jianshu.io/upload_images/965383-ce48a5803e5e6c33.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Makefile modified.png"></li>
+</ul>
+<ul>
+<li><a>TKDemo.plist</a> 该文件中的 Bundles : 指定 bundle 为 tweak 的作用对象。也可添加多个 bundle, 指定多个为 tweak 作用对象。<br><img src="http://upload-images.jianshu.io/upload_images/965383-4031611bc6710a9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="plist.png"></li>
+</ul>
+<ul>
+<li><a>control</a> ： 该 tweak 所需的基本信息 (<del>其实大部分都是刚刚创建 tweak 所填写的信息啦</del>)<br><img src="http://upload-images.jianshu.io/upload_images/965383-503cc428e16ac218.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="control.png"></li>
+</ul>
+<ul>
+<li><a>Tweak.xm</a>：重点文件，用来编写 hook 代码,因为支持<code>Logos</code>和<code>C/C++</code>语法，可以让我们不用去写一些 runtime 方法(<del>必要时候还是要写</del>)从而进行 hook 。<blockquote>
+<p>.x 文件支持Logos语法，.xm 文件支持Logos和C/C++语法。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Logos-常用语法"><a href="#Logos-常用语法" class="headerlink" title="Logos 常用语法"></a>Logos 常用语法</h4><ul>
+<li><code>%hook</code><br>  指定需要 hook 的类，以<code>%end</code>结尾。</li>
+<li><code>%orig</code><br>  在 <code>%hook</code> 内部使用，执行 hook 住的方法原代码。</li>
+<li><code>%new</code><br>   在<code>%hook</code>的内部使用，给 class 添加新方法，与<code>class_addMethod</code>相同。<br>   与 Category 中添加方法的区别：Category 为编译时添加，<code>class_addMethod</code> 为动态添加。<br><strong>warm ：添加的方法需要在 @interface 中进行声明</strong></li>
+<li><code>%c</code><br>获取一个类，等同于<code>objc_getClass</code>、<code>NSClassFromString</code>  </li>
+</ul>
+<blockquote>
+<p><code>%hook</code>、<code>%log</code>、<code>%orig</code> 等都是 <code>mobilesubstrate</code> 的 <code>MobileHooker</code> 模块提供的宏，除此之外还有 <code>%group</code> <code>%init</code>、 <code>%ctor</code>等,其实也就是把 <code>method swizzling</code> 相关的方法封装成了各种宏标记，若想深入了解，请左转 <a href="www.google.com">Google</a>       </p>
+</blockquote>
+<h4 id="编写-tweak-xm"><a href="#编写-tweak-xm" class="headerlink" title="编写 tweak.xm"></a>编写 tweak.xm</h4><p>熟悉各种语法之后便可以进行编写代码了，其中<code>MMUIViewController</code>为微信的基础的ViewController。我们通过 hook <code>viewDidApper:</code> 来进行 hello World 弹窗。<br><img src="http://upload-images.jianshu.io/upload_images/965383-2a245ca9f43e31b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tweak.xm.png"></p>
+<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><p>使用<code>make</code>进行编译<br>若想重新编译记得先<code>make clean</code><br><code>make</code>后在当前文件夹下面将生成两个文件夹:<code>.theos</code> 与 <code>obj</code>,其中我们编译完成的动态库就在<code>.thoes/obj/debug</code>的下面，与工程名相同。</p>
+<p><strong>若编译的时候提示找不到 <code>common.mk</code> 或者是 <code>tweak.mk</code>，请根据上述步骤（<a>4.1 安装并配置 theos</a>）重新 export theos，或写入至~/.bash_profile，或更改Makefile的文件，将<code>$(THEOS)/makefiles</code> 与 <code>$(THEOS_MAKE_PATH)</code> 替换成<code>opt/theos/makefiles</code></strong><br><img src="http://upload-images.jianshu.io/upload_images/965383-301fc12dbaa0e8c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="make.png"></p>
+<hr>
+<h3 id="查看（修改）依赖"><a href="#查看（修改）依赖" class="headerlink" title="查看（修改）依赖"></a>查看（修改）依赖</h3><h4 id="otool"><a href="#otool" class="headerlink" title="otool"></a>otool</h4><blockquote>
+<p>查看执行文件所依赖的库文件</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">otool -L TKDemo.dylib</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-cdca48c290f3ace2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="查看依赖库.png"></p>
+<p>若发现有依赖 <code>/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate</code> 使用 install_name_tool 更改依赖。</p>
+<blockquote>
+<p>CydiaSubstrate 只有越狱的手机上才有，因此需要我们手动更改并导入。</p>
+</blockquote>
+<hr>
+<h4 id="更换动态库的依赖"><a href="#更换动态库的依赖" class="headerlink" title="更换动态库的依赖"></a>更换动态库的依赖</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">install_name_tool -change /Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate @loader_path/libsubstrate.dylib tkchat.dylib  </div><div class="line">// install_name_tool -change 需要替换的库 @loader_path/需要引用的库 需要更改的dylib</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-9a133bce9c59b562.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="替换依赖库.png"></p>
+<hr>
+<h3 id="动态库注入"><a href="#动态库注入" class="headerlink" title="动态库注入"></a>动态库注入</h3><blockquote>
+<p>把我们写的动态库注入到要 hook 的二进制文件</p>
+</blockquote>
+<p><a href="https://github.com/gengjf/insert_dylib" target="_blank" rel="external">insert_dylib</a></p>
+<p><strong>先将 ipa 文件解压，在解压后的<code>/Payload</code>目录中，将app可执行文件拷贝出来。再将我们编写的动态库与libsubstrate.dylib 拷贝至app的包内容中。</strong><br>执行命令：<br><code>./insert_dylib 动态库路径 目标二进制文件</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./insert_dylib @executable_path/xxxx.dylib xxxx</div><div class="line">// @executable_path 是一个环境变量，指的是二进制文件所在的路径</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-4269d4c6241ec0f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="注入动态库.png"><br><del>之所以能够不使用./是因为已经将 insert_dylib 导入到/usr/local/bin目录中</del><br><strong>注入成功后将app目录中的 WeChat 删除，将 WeChat_patched 改为WeChat。</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-133336f434b7d1fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="替换二进制文件.png"></p>
+<p><strong>warm ：使用 insert_dylib 时若出现 error 记得修改权限， <code>chmod 777 insert_dylib</code></strong></p>
+<hr>
+<h3 id="打包、重签名、安装"><a href="#打包、重签名、安装" class="headerlink" title="打包、重签名、安装"></a>打包、重签名、安装</h3><p>使用图形化打包签名工具 <a href="https://github.com/DanTheMan827/ios-app-signer" target="_blank" rel="external">ios-app-signer</a></p>
+<blockquote>
+<p>选择相应的证书与 Provisioning Profile 文件进行打包。</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-ec0313e0def01dc3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="打包重签名.png"></p>
+<p><del>友情提示：如果证书没有支持 watch，请删除 app 中的<a>watch</a>相关的文件。</del></p>
+<p>证书的话可以用 Xcode 新建个 Project (<del>个人开发者证书7天后过期</del>)，在手机上运行下即可生成。导入时记得到真机上需要有相应的Provisioning Profile 文件。可在 Xcode-Window-Devices，双指点击设备查看Provisioning Profile文件，点击下面的 <code>+</code> 进行安装。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-779ee64170495e9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Devices.png"></p>
+<p>也可使用<a href="http://pro.25pp.com/pp_mac_ios" target="_blank" rel="external">PP助手</a>进行安装。</p>
+<hr>
+<h3 id="hello-World"><a href="#hello-World" class="headerlink" title="hello World"></a>hello World</h3><blockquote>
+<p>最后就是我们的 hello World</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-30bee467e5ec526d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hello World.png"></p>
+<hr>
+<h3 id="autoInsertDylib-sh-脚本"><a href="#autoInsertDylib-sh-脚本" class="headerlink" title="autoInsertDylib.sh 脚本"></a>autoInsertDylib.sh 脚本</h3><blockquote>
+<p>由于以上的操作(查看更改依赖库、注入动态库)都类似且繁琐，个人懒癌，就写了这个sh。</p>
+</blockquote>
+<p><a>warm !!!</a><br><a>warm !!!</a><br><a>warm !!!</a><br><strong>该脚本的中<code>insert_dylib</code>路径使用的是<code>/usr/local/bin</code>(<del>请看前言</del>),请根据自身环境更改脚本中的<code>insert_dylib</code>路径，以免错误。</strong></p>
+<p><strong><code>iOS App Singer</code> 本人放在了<code>/Applications/</code>中，若Applications中没有，则在脚本执行完手动打开。</strong></p>
+<p>使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./autoInsertDylib.sh ipa路径 libsubstrate.dylib路径 要注入的dylib路径</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-bacd4d58b44432e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="autoInsertDylib 操作.png"></p>
+<p>autoInsertDylib.sh 内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> !/bin/bash</div><div class="line"></div><div class="line">SOURCEIPA="$1"</div><div class="line">LIBSUBSTRATE="$2"</div><div class="line">DYLIB="$3"</div><div class="line"></div><div class="line">if [ ! -d ~/Desktop/tk-tweak-temp-folder/ ]; then</div><div class="line">	echo "在 Desktop 创建tk-tweak-temp-folder"</div><div class="line">	mkdir ~/Desktop/tk-tweak-temp-folder</div><div class="line"></div><div class="line">else</div><div class="line">	rm -rf ~/Desktop/tk-tweak-temp-folder/*</div><div class="line">fi</div><div class="line"></div><div class="line">cp "$SOURCEIPA" "$DYLIB" "$LIBSUBSTRATE" ~/Desktop/tk-tweak-temp-folder/</div><div class="line"></div><div class="line">echo "正将" $&#123;SOURCEIPA##*/&#125; $&#123;DYLIB##*/&#125; $&#123;LIBSUBSTRATE##*/&#125;  "拷贝至~/Desktop/tk-tweak-temp-folder"</div><div class="line"></div><div class="line">cd ~/Desktop/tk-tweak-temp-folder/</div><div class="line"></div><div class="line"></div><div class="line">otool -L $&#123;DYLIB##*/&#125; &gt; depend.log</div><div class="line">grep "/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate" depend.log &gt;grep_result.log</div><div class="line">if [ $? -eq 0 ]; then</div><div class="line">    echo "发现有依赖于 CydiaSubstrate, 正将其替换为 libsubstrate"</div><div class="line">	install_name_tool -change /Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate @loader_path/libsubstrate.dylib $&#123;DYLIB##*/&#125;</div><div class="line"></div><div class="line">else</div><div class="line">    echo "没有发现依赖于CydiaSubstrate"</div><div class="line">fi</div><div class="line"></div><div class="line">echo "解压" $&#123;SOURCEIPA##*/&#125;</div><div class="line"></div><div class="line">unzip -qo "$SOURCEIPA" -d extracted</div><div class="line"></div><div class="line">APPLICATION=$(ls extracted/Payload/)</div><div class="line"></div><div class="line">cp -R ~/Desktop/tk-tweak-temp-folder/extracted/Payload/$APPLICATION ~/Desktop/tk-tweak-temp-folder/</div><div class="line"></div><div class="line">echo "注入" $&#123;DYLIB##*/&#125; "到" $APPLICATION</div><div class="line">cp $&#123;DYLIB##*/&#125; $&#123;LIBSUBSTRATE##*/&#125; $APPLICATION/</div><div class="line"></div><div class="line">echo "删除" $&#123;APPLICATION##*/&#125; "中 watch 相关文件"</div><div class="line"></div><div class="line">rm -rf ~/Desktop/tk-tweak-temp-folder/$APPLICATION/*watch*</div><div class="line">rm -rf ~/Desktop/tk-tweak-temp-folder/$APPLICATION/*Watch*</div><div class="line"></div><div class="line">echo "是否注入" $&#123;DYLIB##*/&#125; ":(Y/N)"</div><div class="line"></div><div class="line">insert_dylib  @executable_path/$&#123;DYLIB##*/&#125; $APPLICATION/$&#123;APPLICATION%.*&#125; &gt; insert_dylib.log</div><div class="line"></div><div class="line">echo "注入成功"</div><div class="line">cd $APPLICATION</div><div class="line"></div><div class="line">rm -rf $&#123;APPLICATION%.*&#125;</div><div class="line">mv $&#123;APPLICATION%.*&#125;_patched $&#123;APPLICATION%.*&#125;</div><div class="line"></div><div class="line">echo "正将"  $&#123;APPLICATION%.*&#125;_patched "覆盖为" $&#123;APPLICATION%.*&#125;</div><div class="line"></div><div class="line">cd ~/Desktop/tk-tweak-temp-folder/</div><div class="line"></div><div class="line">echo "删除临时文件"</div><div class="line"></div><div class="line">rm -rf $&#123;SOURCEIPA##*/&#125; $&#123;DYLIB##*/&#125; $&#123;LIBSUBSTRATE##*/&#125; extracted insert_dylib.log depend.log grep_result.log</div><div class="line"></div><div class="line">echo "打开 tk-tweak-temp-folder 文件夹"</div><div class="line">open ~/Desktop/tk-tweak-temp-folder</div><div class="line">open /Applications/iOS\ App\ Signer.app</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是整个 iOS 逆向的主要流程(<del>虽然hook的代码很渣</del>),其中注入动态库与打包重签名的工具不止一种，可以根据自己的爱好网上查找。本人也是踩了不少坑不断摸索来的，比如由于tweak工程名的问题，导致使用 <code>iOS App Signer</code> 打包重签名的一直error：<a><br>Error verifying code signature</a>。希望能给刚入iOS 逆向坑的人一点帮助，文章中如有错误欢迎指出。由于涉及只是工具的使用，涉及到的原理比较薄弱，若想深入了解可以去阅读下参考文档。</p>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="https://book.douban.com/subject/26363333/" target="_blank" rel="external">iOS应用逆向工程 第2版</a></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=2653577384&amp;idx=1&amp;sn=b44a9c9651bf09c5bea7e0337031c53c&amp;scene=0#wechat_redirect" target="_blank" rel="external">移动App入侵与逆向破解技术－iOS篇</a></p>
+<p><a href="http://yulingtianxia.com/blog/2017/02/28/Make-WeChat-Great-Again/" target="_blank" rel="external">Make WeChat Great Again</a></p>
+<p><a href="http://yulingtianxia.com/blog/2017/03/06/How-to-hook-the-correct-method-in-reverse-engineering/" target="_blank" rel="external">如何在逆向工程中 Hook 得更准 - 微信屏蔽好友&amp;群消息实战</a></p>
+<p><a href="http://yulingtianxia.com/blog/2016/05/06/Let-your-WeChat-for-Mac-never-revoke-messages/" target="_blank" rel="external">让你的微信不再被人撤回消息</a></p>
+<p><a href="http://www.swiftyper.com/2016/12/26/wechat-redenvelop-tweak-for-non-jailbroken-iphone/" target="_blank" rel="external">免越狱版 iOS 插件</a></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> iOS </tag>
+            
+            <tag> 逆向 </tag>
+            
+            <tag> 微信 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Xcode中常用的第三方插件和小工具]]></title>
+      <url>/2016/07/07/Xcode%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E7%AC%AC%E4%B8%89%E6%96%B9%E6%8F%92%E4%BB%B6%E5%92%8C%E5%B0%8F%E5%B7%A5%E5%85%B7/</url>
+      <content type="html"><![CDATA[<h2 id="Xcode常用的第三方插件"><a href="#Xcode常用的第三方插件" class="headerlink" title="Xcode常用的第三方插件"></a>Xcode常用的第三方插件</h2><pre><code>Xcode 所有的插件都安装在目录~/Library/Application Support/Developer/Shared/Xcode/Plug-ins/下，每个插件为一个子目录，你也可以手工切换到这个目录来增加或删除插件。
+</code></pre><a id="more"></a>
+<h3 id="Alcatraz-–-管理Xcode插件的Xcode插件"><a href="#Alcatraz-–-管理Xcode插件的Xcode插件" class="headerlink" title="Alcatraz – 管理Xcode插件的Xcode插件"></a>Alcatraz – 管理Xcode插件的Xcode插件</h3><p>Alcatraz 是一个开源的 Xcode 包管理器。可让你发现和安装插件、模版和颜色方案，无需手工克隆和拷贝文件。</p>
+<p>项目地址：<a href="https://github.com/alcatraz/Alcatraz" target="_blank" rel="external">https://github.com/alcatraz/Alcatraz</a></p>
+<p>位置:   </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-eb0f22ebef8b5c37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><strong>以下的插件均可以通过Alcatraz来查找安装，也可以根据项目地址下载到本地安装</strong>   </p>
+<hr>
+<h3 id="FuzzyAutocompletePlugin-–-代码自动补全插件"><a href="#FuzzyAutocompletePlugin-–-代码自动补全插件" class="headerlink" title="FuzzyAutocompletePlugin – 代码自动补全插件"></a>FuzzyAutocompletePlugin – 代码自动补全插件</h3><p>FuzzyAutocompletePlugin是一个Xcode兼容的插件，通过添加模糊匹配来提高Xcode代码自动补全功能，开发者无需遵循从头匹配的原则，只要记得方法里某个关键字即可进行匹配，很好地提高了工作效率。   </p>
+<p>项目地址：<a href="https://github.com/chendo/FuzzyAutocompletePlugin" target="_blank" rel="external">https://github.com/chendo/FuzzyAutocompletePlugin</a></p>
+<p>效果 ：<br><img src="http://upload-images.jianshu.io/upload_images/965383-6de64d96e1ddc69d.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<hr>
+<h3 id="VVDocumenter-Xcode-–-规范注释生成器"><a href="#VVDocumenter-Xcode-–-规范注释生成器" class="headerlink" title="VVDocumenter-Xcode – 规范注释生成器"></a>VVDocumenter-Xcode – 规范注释生成器</h3><p>VVDocumenter-Xcode是一款快速生成规范化注释的插件，只需要输入三个斜线“///”，即可生成规范化注释。<br>项目地址：<a href="https://github.com/onevcat/VVDocumenter-Xcode" target="_blank" rel="external">https://github.com/onevcat/VVDocumenter-Xcode</a></p>
+<p>效果：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-b9eefe7a5fc32622.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<hr>
+<h3 id="CocoaPods-for-Xcode-–-CocoaPods图形显示插件"><a href="#CocoaPods-for-Xcode-–-CocoaPods图形显示插件" class="headerlink" title="CocoaPods for Xcode – CocoaPods图形显示插件"></a>CocoaPods for Xcode – CocoaPods图形显示插件</h3><p>该CocoaPods的插件增加了一个CocoaPods菜单到Xcode的产品菜单。可以不用通过命令行而进行CocoaPods的操作。</p>
+<p>项目地址：<a href="https://github.com/kattrali/cocoapods-xcode-plugin" target="_blank" rel="external">https://github.com/kattrali/cocoapods-xcode-plugin</a></p>
+<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/965383-126a78759aaf7e86.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<pre><code>若是出现 the command path could not be resolved 错误，可以在终端使用dirname `which pod` 命令,将CocoaPods的路径拷贝到上图的GEM_PATH中
+</code></pre><hr>
+<h3 id="ZLGotoSandboxPlugin-Xcode-–-项目沙盒路径插件"><a href="#ZLGotoSandboxPlugin-Xcode-–-项目沙盒路径插件" class="headerlink" title="ZLGotoSandboxPlugin-Xcode – 项目沙盒路径插件"></a>ZLGotoSandboxPlugin-Xcode – 项目沙盒路径插件</h3><p>该插件用于在Xcode菜单中快捷打开项目沙盒路径</p>
+<p>项目地址：<a href="https://github.com/MakeZL/ZLGotoSandboxPlugin" target="_blank" rel="external">https://github.com/MakeZL/ZLGotoSandboxPlugin</a></p>
+<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/965383-e8316c0b7f831af1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<hr>
+<h3 id="BBUDebuggerTuckAway-–-自动隐藏Debugger的Xcode插件"><a href="#BBUDebuggerTuckAway-–-自动隐藏Debugger的Xcode插件" class="headerlink" title="BBUDebuggerTuckAway – 自动隐藏Debugger的Xcode插件"></a>BBUDebuggerTuckAway – 自动隐藏Debugger的Xcode插件</h3><p>BBUDebuggerTuckAway是一款支持自动隐藏Debugger的Xcode插件，其开发者为来自德国柏林Contentful GmbH公司的Boris Bügling。使用BBUDebuggerTuckAway，开发者能够实现在编辑代码时，自动隐藏底部的调试栏。</p>
+<p>项目地址：<a href="https://github.com/neonichu/BBUDebuggerTuckAway" target="_blank" rel="external">https://github.com/neonichu/BBUDebuggerTuckAway</a></p>
+<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/965383-d90284b354f6e17e.jpg?imageMogr2/auto-orient/strip" alt=""></p>
+<hr>
+<h3 id="ESJsonFormat-Xcode-–-JSON转换模型的插件"><a href="#ESJsonFormat-Xcode-–-JSON转换模型的插件" class="headerlink" title="ESJsonFormat-Xcode – JSON转换模型的插件"></a>ESJsonFormat-Xcode – JSON转换模型的插件</h3><p>ESJsonFormat-Xcode 是 一款将JSON格式化输出为模型的属性的插件。<br>需要注意的几点：<br>1.JSON中的key对应的value为Null的话会格式化成NSString类型<br>2.格式化之前光标放在你需要添加属性的地方<br>3.如果不输出到文件，RootClass需要自己手动创建，插件只负责RootClass里面的属性生成<br>4.生成的 MJExtension 框架中objectClassInArray方法(类方法)<br>项目地址：<a href="https://github.com/EnjoySR/ESJsonFormat-Xcode" target="_blank" rel="external">https://github.com/EnjoySR/ESJsonFormat-Xcode</a>  </p>
+<p>效果：<br><img src="https://raw.githubusercontent.com/EnjoySR/ESJsonFormat-Xcode/master/ScreenShot/ScreenShot3.gif" alt=""></p>
+<hr>
+<h3 id="deriveddata-exterminator-–-清除-Xcode-缓存目录的插件"><a href="#deriveddata-exterminator-–-清除-Xcode-缓存目录的插件" class="headerlink" title="deriveddata-exterminator – 清除 Xcode 缓存目录的插件"></a>deriveddata-exterminator – 清除 Xcode 缓存目录的插件</h3><p>有些时候 Xcode 会出各种奇怪的问题，最常见的是在某些复杂操作下（例如同一个项目，来回切换到各种分支版本），会造成 Xcode 显示一些编译的错误或警告，但是最终却又可以编译通过。而这时候通常清除 Xcode 缓存就可以解决这类问题。该插件在 Xcode 菜单上增加了一个清除缓存按钮，可以一键方便地清楚缓存内容。</p>
+<p>项目地址：<a href="https://github.com/kattrali/deriveddata-exterminator" target="_blank" rel="external">https://github.com/kattrali/deriveddata-exterminator</a></p>
+<p>按钮位置：<br><img src="https://github.com/kattrali/deriveddata-exterminator/raw/master/docs/menu.png" alt=""></p>
+<hr>
+<h3 id="SCXcodeSwitchExpander-–-自动填充Switch语句枚举值的插件"><a href="#SCXcodeSwitchExpander-–-自动填充Switch语句枚举值的插件" class="headerlink" title="SCXcodeSwitchExpander – 自动填充Switch语句枚举值的插件"></a>SCXcodeSwitchExpander – 自动填充Switch语句枚举值的插件</h3><p>SCXcodeSwitchExpander插件帮助你迅速地在switch语句中填充枚举类型的每种可能的取值。<br>例如，当你输入switch，然后键入一个NSTableViewAnimationOptions类时，该插件会将其可能的取值补全在每一个case之后。</p>
+<p>项目地址： <a href="https://github.com/stefanceriu/SCXcodeSwitchExpander" target="_blank" rel="external">https://github.com/stefanceriu/SCXcodeSwitchExpander</a></p>
+<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/965383-fc2b1d808f209706.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<hr>
+<h3 id="KSImageNamed-Xcode-–-UIImage的imageNamed文件名补全插件"><a href="#KSImageNamed-Xcode-–-UIImage的imageNamed文件名补全插件" class="headerlink" title="KSImageNamed-Xcode – UIImage的imageNamed文件名补全插件"></a>KSImageNamed-Xcode – UIImage的imageNamed文件名补全插件</h3><p>KSImageNamed-Xcode为项目中使用的UIImage的imageNamed提供文件名自动补全功能。使用[UIImage imageNamed:@”xxx”]时，该插件会扫描整个workspace中的图片文件。并且显示选中图片的缩略图</p>
+<p>项目地址： <a href="https://github.com/ksuther/KSImageNamed-Xcode" target="_blank" rel="external">https://github.com/ksuther/KSImageNamed-Xcode</a></p>
+<p>效果 ：</p>
+<p><img src="https://camo.githubusercontent.com/c354bf04524df86daeabe7a6d2b9926fac790f85/68747470733a2f2f7261772e6769746875622e636f6d2f6b7375746865722f4b53496d6167654e616d65642d58636f64652f6d61737465722f73637265656e73686f742e676966" alt="">   </p>
+<hr>
+<h2 id="Xcode中的小工具-Xcode版本：7-1-1-7B1005"><a href="#Xcode中的小工具-Xcode版本：7-1-1-7B1005" class="headerlink" title="Xcode中的小工具(Xcode版本：7.1.1 (7B1005))"></a>Xcode中的小工具(Xcode版本：7.1.1 (7B1005))</h2><pre><code>主要介绍Xcode-Window中的工具
+</code></pre><hr>
+<h3 id="Devices"><a href="#Devices" class="headerlink" title="Devices"></a>Devices</h3><p><img src="http://upload-images.jianshu.io/upload_images/965383-c901731e1fe60286.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>Devices中主要显示当前Mac、模拟器、连接的iPhone设备中的信息，包括设备名、版本、标识符等信息。iPhone设备的话还有显示所安装的App信息(App仅包含调试、越狱的App)。包括App名称、App版本、App标识。<strong>iPhone中的identifier就是UDID</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-b7d8df1fbc7e443e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Devices.png"></p>
+<p>同时选定某个App，在下方可以进行删除、查看沙盒等操作。<br><img src="http://upload-images.jianshu.io/upload_images/965383-bc39fd4777f1f886.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<hr>
+<h3 id="Organizer"><a href="#Organizer" class="headerlink" title="Organizer"></a>Organizer</h3><h4 id="Archives"><a href="#Archives" class="headerlink" title="Archives"></a>Archives</h4><p>Archives 主要用于提交App到AppStore审核和提取企业包/Ad hoc 包。界面如下所示：   </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-d880dc98c8a71d21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>若要提交AppStore审核选择 <code>Upload to App Store…</code> ,接着根据提示填写即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-78ad214b9ee47346.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>若要打包选择<code>Export…</code>，选择所要打的类型的包，包括企业、AD hoc，接着 Next ，按要求选择账号，然后继续即可，最后就是导出ipa了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-b2fa27729d466318.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="Crashes"><a href="#Crashes" class="headerlink" title="Crashes"></a>Crashes</h4><p>苹果用来收集用户手机中当前应用的崩溃报告。<br>但需要注意的是这里只是一部分的数据，举例来说如果你看到的崩溃是10次，但是可能苹果只收集了20%的用户信息。所以你可以大概估计应该是10*5=50次崩溃。<br>可以在左侧选择你要查看崩溃信息的发布版本.<br><img src="http://upload-images.jianshu.io/upload_images/965383-7c86e73066bef7f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>在崩溃信息这一栏苹果会按照崩溃数量排序，将崩溃数量最多的排在最前。右侧的详细信息会显示是崩溃时的调用堆栈，可以看到是哪行代码导致的崩溃。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-00c762a8a2f5b296.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>若想定位到崩溃的那行代码，可以选中要解决的崩溃后，在窗口右侧选择open in project。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-2f1c12512d585e5e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="Projects"><a href="#Projects" class="headerlink" title="Projects"></a>Projects</h4><p>此工具主要用于查看工程的路径和相应缓存数据的路径<br><img src="http://7xorl3.com1.z0.glb.clouddn.com/屏幕快照%202015-12-16%20上午10.09.50.png" alt=""></p>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.zhihu.com/question/24859067" target="_blank" rel="external">大家用xcode开发的时候都会用到什么插件</a><br><a href="http://www.csdn.net/article/2014-05-04/2819586-the-best-xcode-plugins/1" target="_blank" rel="external">盘点开发者最喜爱的十大开源Xcode插件</a><br><a href="http://www.cocoachina.com/industry/20130918/7022.html" target="_blank" rel="external">那些不能错过的Xcode插件</a><br><a href="http://www.cocoachina.com/ios/20151020/13794.html" target="_blank" rel="external">Xcode7中你一定要知道的炸裂调试神技</a></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Xcode </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Instrument介绍、Xcode源码版本控制的使用]]></title>
+      <url>/2016/04/08/Instrument%E4%BB%8B%E7%BB%8D-Xcode%E6%BA%90%E7%A0%81%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+      <content type="html"><![CDATA[<h2 id="Instrument工具介绍与使用"><a href="#Instrument工具介绍与使用" class="headerlink" title="Instrument工具介绍与使用"></a>Instrument工具介绍与使用</h2><blockquote>
+<p>Instrument是性能分析、动态跟踪和分析OS X和iOS代码的测试工具。它是一个灵活的和强大的工具，可以让您追踪程序运行的过程，收集数据，并检查所收集的数据。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="界面"><a href="#界面" class="headerlink" title="界面"></a>界面</h3><p><img src="http://upload-images.jianshu.io/upload_images/965383-a1f1b143a0d9c817.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>1.追踪代码中的（甚至是那些难以复制的）问题；</p>
+<p>2.分析程序的性能；</p>
+<p>3.实现程序的自动化测试；</p>
+<p>4.部分实现程序的压力测试；</p>
+<p>5.执行系统级别的通用问题追踪调试；</p>
+<p>6.使你对程序的内部运行过程更加了解。</p>
+<h3 id="常用的Instrument模板"><a href="#常用的Instrument模板" class="headerlink" title="常用的Instrument模板"></a>常用的Instrument模板</h3><p>Leaks（泄漏）：一般的措施内存使用情况，检查泄漏的内存，并提供了所有活动的分配和泄漏模块的类对象分配统计信息以及内存地址历史记录；</p>
+<p>Allocations（内存分配）：跟踪过程的匿名虚拟内存和堆的对象提供类名和可选保留/释放历史；</p>
+<p>Time Profiler（时间探查）：执行对系统的CPU上运行的进程低负载时间为基础采样。</p>
+<p>Activity Monitor（活动监视器）：显示器处理的CPU、内存和网络使用情况统计；</p>
+<p>Automation（自动化）：这个模板执行它模拟用户界面交互为IOS机应用从instrument启动的脚本；</p>
+<h3 id="工具界面"><a href="#工具界面" class="headerlink" title="工具界面"></a>工具界面</h3><p><img src="http://upload-images.jianshu.io/upload_images/965383-2edd928785704525.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>1、这里控制记录过程，点击红色的”记录”按钮可以停止或开始当前正在分析的app（在记录和停止按钮之间切换），暂停键，如你所想，暂停当前正在运行的app。</p>
+<p>2、这里是执行计时器（run timer），计时器记录着正在分析的app执行了多长时间、执行了多少次。如果你使用记录控制按钮来停止你的app，然后重启，这将创建一个新的运行记录，同时会显示”Run 2 of 2”。</p>
+<p>3、这里被称作路径（track），就你选择的Time Profiler工具而言，因为只有一个工具，所以这里只有一条路径，关于这里显示的图标的详情，一会你就会在接下来的教程中了解更多。</p>
+<p>4、这里是详情面板，展示的是你正在使用的工具的主要信息。就现在而言，这里展示的是最”笨重（hottest）”的方法–换句话说，占用CPU时间最长的方法。点击上方的bar会看到Call Tree（左手边的那个）并选中Sample List，然后你会看到数据的不同视图，视图展示了每一个示例。点击其中几个，你会在Extended Detail inspector中看到被捕获的堆栈跟踪。</p>
+<p>5、这里是检查器（inspector）面板，一共有三个检查器：record setting（记录设置），display setting（展示设置），还有extends detail（扩展详情）。一会你将了解更多关于这里面的一些选项。</p>
+<p><img src="https://developer.apple.com/library/mac/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/Art/instruments_inspector_pane_navigation_bar_2x.png" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-913cde0d8d46c5bd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="Call-Tree各个选项和功能"><a href="#Call-Tree各个选项和功能" class="headerlink" title="Call Tree各个选项和功能"></a>Call Tree各个选项和功能</h3><p>Separate by Thread: 每个线程应该分开考虑。只有这样你才能揪出那些大量占用CPU的”重”线程  </p>
+<p>Invert Call Tree: 从上倒下跟踪堆栈,这意味着你看到的表中的方法,将已从第0帧开始取样,这通常你是想要的,只有这样你才能看到CPU中花费时间最深的方法.也就是说FuncA{FunB{FunC}} 勾选此项后堆栈以C-&gt;B-A 把调用层级最深的C显示在最外面</p>
+<p>Hide Missing Symbols: 如果dSYM无法找到你的app或者系统框架的话,那么表中看不到方法名只能看到十六进制的数值,如果勾线此项可以隐藏这些符号,便于简化数据</p>
+<p>Hide System Libraries: 勾选此项你会显示你app的代码,这是非常有用的. 因为通常你只关心cpu花在自己代码上的时间不是系统上的</p>
+<p>Show Obj-C Only: 只显示oc代码 ,如果你的程序是像OpenGl这样的程序,不要勾选侧向因为他有可能是C++的  </p>
+<p>Flatten Recursion: 递归函数, 每个堆栈跟踪一个条目</p>
+<p>Top Functions: 一个函数花费的时间直接在该函数中的总和，以及在函数调用该函数所花费的时间的总时间。因此，如果函数A调用B，那么A的时间报告在A花费的时间加上B.花费的时间,这非常真有用，因为它可以让你每次下到调用堆栈时挑最大的时间数字，归零在你最耗时的方法。</p>
+<font color="#FF6347">现介绍下 Leak 工具的使用</font>
+
+<h3 id="Leak-的使用"><a href="#Leak-的使用" class="headerlink" title="Leak 的使用"></a>Leak 的使用</h3><p>1.选择Leaks选项</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-708ee3fbe239a5df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>2.选中设备–app,之后点击红点运行.</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-0e3ba4c99c0d7e92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>3.由于Leaks是动态监测，所以我们需要手动操作APP,一边操作，一边观察Leaks的变化，当出现红色叉时，就监测到了内存泄露，点击右上角的暂停按钮，进行暂停检测(也可继续检测，当多个时暂停，一次处理了多个).如图所示:</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-2757f63dc7d927f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>4.下面就是定位修改了,此时选中有红色叉的Leaks，下面有个”田”字方格，点开，选中Call Tree。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-68512140a5809e28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>显示如下图界面<br><img src="http://upload-images.jianshu.io/upload_images/965383-b10ca294269850db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>5.下面就是最关键的一步，在这个界面的右下角有若干选框，选中Invert Call Tree 和Hide System Libraries,（红圈范围内）显示如下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-95ef9d30e4b5e5c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>6.定位<br>在详情面板选中显示的若干条中的一条，双击，会自动跳到内存泄露代码处，然后点击右上角 Xcode 图标进行修改。如图所示<br><img src="http://upload-images.jianshu.io/upload_images/965383-b71222d169b660d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-e39d759e5dd13cba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="Xcode上源码版本控制的使用"><a href="#Xcode上源码版本控制的使用" class="headerlink" title="Xcode上源码版本控制的使用"></a>Xcode上源码版本控制的使用</h2><p>从 Xcode5 开始引入了使用 git 的一些新特性。它将 git 的各项功能整合到一个菜单中，并提供子菜单来进行软件合并的控制。菜单如下图所示。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-b1ea0d5d84e71488.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>其中功能包括创建分支、切换分支、合并分支、提交(Commit)、撤销修改(Discard Changes)、Pull、查看历史。   </p>
+<pre><code>由于不知道什么原因，无法验证远程仓库的账号和密码。故无法使用Push操作…
+</code></pre><h3 id="分支的操作"><a href="#分支的操作" class="headerlink" title="分支的操作"></a>分支的操作</h3><h4 id="新建分支"><a href="#新建分支" class="headerlink" title="新建分支"></a>新建分支</h4><p>选择 New Branch ，填写所要新建的分支名称，输入完成系统将会自动切换到所新建的分支。</p>
+<h4 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h4><p>选择 Switch to Branch ，在新窗口可以看到本地和远程所有的分支，选择所要切换的分支(默认不显示当前分支)，点击 Switch 即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-aaa07d60f44bdfa2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h4><p>选择 Merge from Branch，选择将要合并的分支，点击 Merge 即可。</p>
+<h3 id="提交-Commit"><a href="#提交-Commit" class="headerlink" title="提交(Commit)"></a>提交(Commit)</h3><p>选择 Commit ,可看到如下图所示的窗口界面。左边为项目中状态发生改变的文件，<code>M</code>表示修改，<code>A</code>表示新添加。中间部分为选定文件的当前版本和前一个版本的对比。下面为此处 commit 的描述信息。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-98eb25d7056fa602.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="撤销修改-Discard-Changes"><a href="#撤销修改-Discard-Changes" class="headerlink" title="撤销修改(Discard Changes)"></a>撤销修改(Discard Changes)</h3><h4 id="Discard-All-Changes"><a href="#Discard-All-Changes" class="headerlink" title="Discard All Changes"></a>Discard All Changes</h4><p>当选择 Discard All Changes 时，可以将撤销当前工程的所有修改。恢复到当前版本最初状态。</p>
+<h4 id="Discard-Change-in-“文件名”"><a href="#Discard-Change-in-“文件名”" class="headerlink" title="Discard Change in “文件名”"></a>Discard Change in “文件名”</h4><p>当选中某个文件，可以撤销该文件的所有修改，恢复到当前版本最初状态。</p>
+<h3 id="Pull-和查看历史"><a href="#Pull-和查看历史" class="headerlink" title="Pull 和查看历史"></a>Pull 和查看历史</h3><p>当选择 Pull，可以从远程仓库获取最新内容。</p>
+<p>选择 History，可以查看当前工程的版本信息.点击右边的 show xx modified files,可查看修改了哪些文件。<br><img src="http://upload-images.jianshu.io/upload_images/965383-be2d17ad2fdb4ecd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="Show-the-Version-Editor"><a href="#Show-the-Version-Editor" class="headerlink" title="Show the Version Editor"></a>Show the Version Editor</h3><p>选择Xcode工具栏上方的版本控制编辑，可以看到当前版本和之前版本的对比。<br><img src="http://upload-images.jianshu.io/upload_images/965383-b71ade77112545a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">   </p>
+<p>若想查看之前某个版本的文件状态，可以切换下方的文件版本进行查看。<br><img src="http://upload-images.jianshu.io/upload_images/965383-7e0ff906b4e14108.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>右边滚动条的横线为文件所修改的地方。<br><img src="http://upload-images.jianshu.io/upload_images/965383-03bd31f448c55572.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>若想恢复文件到某个版本，先切换到想回复的版本，点击中间的数字，选择 Discard Change 即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-3eff56dcee6b6ffc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://developer.apple.com/library/mac/documentation/DeveloperTools/Conceptual/InstrumentsUserGuide/index.html#//apple_ref/doc/uid/TP40004652-CH3-SW1" target="_blank" rel="external">Instruments User Guide</a><br><a href="http://www.jianshu.com/p/f87455e47da1" target="_blank" rel="external">小白学习instrument</a><br><a href="http://www.cocoachina.com/swift/20150623/12237.html" target="_blank" rel="external">如何使用Instruments诊断App（Swift版）：起步</a></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Xcode </tag>
+            
+            <tag> Instrument </tag>
+            
+            <tag> 工具 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Xcode快捷操作以及Behavior]]></title>
+      <url>/2016/04/08/Xcode%E5%BF%AB%E6%8D%B7%E6%93%8D%E4%BD%9C%E4%BB%A5%E5%8F%8ABehavior/</url>
+      <content type="html"><![CDATA[<h2 id="快捷操作"><a href="#快捷操作" class="headerlink" title="快捷操作"></a>快捷操作</h2><pre><code>注意:本文所阐述的快捷操作不包括类似Command + C 这种系统快捷键
+</code></pre><a id="more"></a>
+<h3 id="关于窗口的快捷键"><a href="#关于窗口的快捷键" class="headerlink" title="关于窗口的快捷键"></a>关于窗口的快捷键</h3><p><strong>Xcode各窗口布局及其说明</strong></p>
+<table>
+<thead>
+<tr>
+<th>窗口</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The Toolbar(工具栏)</td>
+<td>选择视图,运行app,在不同布局界面切换的区域</td>
+</tr>
+<tr>
+<td>The Navigation Area(导航区)</td>
+<td>导航你个工程,警告,报错等的区域</td>
+</tr>
+<tr>
+<td>The Editing Area(编辑区)</td>
+<td>所有奇迹诞生的地方,包括它上方的Jump bar</td>
+</tr>
+<tr>
+<td>The Utility Area(工具区)</td>
+<td>包含检测器和一些库</td>
+</tr>
+<tr>
+<td>The Debugging Area(调试区)</td>
+<td>包括调试窗口和变量检测器</td>
+</tr>
+</tbody>
+</table>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-a6d1119c827a667e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>主要的快捷键以及所对应的窗口</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>快捷键以及所对应的窗口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command (⌘)</td>
+<td>用来导航,控制导航区域</td>
+</tr>
+<tr>
+<td>Option (⎇)</td>
+<td>控制右边的一些东西,比如Assistant Editor,utility editor</td>
+</tr>
+<tr>
+<td>Control:</td>
+<td>编辑区域上的Jump bar的一些交互</td>
+</tr>
+</tbody>
+</table>
+<p><strong>各窗口的快捷键</strong></p>
+<table>
+<thead>
+<tr>
+<th>组合键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command 1~ 8</td>
+<td>跳转到导航区的不同位置</td>
+</tr>
+<tr>
+<td>Command 0</td>
+<td>显示/隐藏导航区</td>
+</tr>
+<tr>
+<td>Command Option 1~ 6</td>
+<td>在不同检测器之间跳转</td>
+</tr>
+<tr>
+<td>Command Option 0</td>
+<td>显示/关闭工具区.</td>
+</tr>
+<tr>
+<td>Control Command Option 1~4</td>
+<td>在不同库之间跳转</td>
+</tr>
+<tr>
+<td>Control 1~ 6</td>
+<td>在Jump bar的不同标签页的跳转</td>
+</tr>
+<tr>
+<td>Command + Enter</td>
+<td>显示标准单窗口编辑器</td>
+</tr>
+<tr>
+<td>Command Option Enter</td>
+<td>它的功能是打开Assistant editor</td>
+</tr>
+<tr>
+<td>Command Option Shift Enter</td>
+<td>打开版本控制编辑器</td>
+</tr>
+<tr>
+<td>Command + Shift + Y</td>
+<td>显示/隐藏调试区</td>
+</tr>
+</tbody>
+</table>
+<p>具体如图所示：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-95256eff5f4cfed0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<pre><code>个人认为较常用为
+Command + 1 ：打开工程文件导航栏
+Control + 5 ：在当前jump bar下显示当前文件位置、
+Control + 6 ：在jump bar显示当前文件中的所有方法（方便快速定位方法位置）
+</code></pre><h3 id="关于文件操作的快捷键"><a href="#关于文件操作的快捷键" class="headerlink" title="关于文件操作的快捷键"></a>关于文件操作的快捷键</h3><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command+N</td>
+<td>新建文件</td>
+</tr>
+<tr>
+<td>Command+Shift + N</td>
+<td>新建工程</td>
+</tr>
+<tr>
+<td>Command+O</td>
+<td>打开文件</td>
+</tr>
+<tr>
+<td>Option+Shift+点击文件</td>
+<td>弹出一个框，让你选择在哪里打开文件</td>
+</tr>
+<tr>
+<td>Option+点击文件</td>
+<td>在Assistant Editor打开文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="关于搜索操作的快捷键"><a href="#关于搜索操作的快捷键" class="headerlink" title="关于搜索操作的快捷键"></a>关于搜索操作的快捷键</h3><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command + Shift + F</td>
+<td>搜索工作区所有文件内部文本</td>
+</tr>
+<tr>
+<td>Command + Shift +Option+ F</td>
+<td>搜索并替换工作区所有文件内部文本</td>
+</tr>
+<tr>
+<td>Command  + F</td>
+<td>搜索当前文件内部文本</td>
+</tr>
+<tr>
+<td>Command Option+ F</td>
+<td>搜索并替换当前文件内部文本</td>
+</tr>
+<tr>
+<td>Command + G</td>
+<td>搜索下一处</td>
+</tr>
+</tbody>
+</table>
+<h3 id="关于文件跳转操作的快捷键"><a href="#关于文件跳转操作的快捷键" class="headerlink" title="关于文件跳转操作的快捷键"></a>关于文件跳转操作的快捷键</h3><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Control + Command + 左右方向键</td>
+<td>跳转到上一个/下一个打开的文件</td>
+</tr>
+<tr>
+<td>Control + Command + 上下方向键</td>
+<td>跳转到相应.h文件/.m文件</td>
+</tr>
+<tr>
+<td>Command + Shift + J</td>
+<td>导航栏跳转到当前打开文件所在位置</td>
+</tr>
+<tr>
+<td>Command + ‘</td>
+<td>跳转到下一个Issue</td>
+</tr>
+</tbody>
+</table>
+<h3 id="关于编辑的快捷键"><a href="#关于编辑的快捷键" class="headerlink" title="关于编辑的快捷键"></a>关于编辑的快捷键</h3><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command + [ 或者 ]</td>
+<td>向前或向后缩进光标所在的那一行代码</td>
+</tr>
+<tr>
+<td>Command + Option+ [ 或者 ]</td>
+<td>向上或向下移动光标所在的那一行代码</td>
+</tr>
+<tr>
+<td>Command + /</td>
+<td>注释/取消注释代码</td>
+</tr>
+<tr>
+<td>Command + 左右方向键</td>
+<td>移动光标到行首或行尾</td>
+</tr>
+<tr>
+<td>Command + 上下方向键</td>
+<td>移动光标到页首或页尾</td>
+</tr>
+<tr>
+<td>Command + Option + 左右方向键</td>
+<td>折叠/显示光标所在大括号中的代码</td>
+</tr>
+<tr>
+<td>Command + Option + Shift +左右方向键</td>
+<td>折叠/显示当前文件中所有的函数和方法      </td>
+</tr>
+<tr>
+<td>Command+Z</td>
+<td>撤销</td>
+</tr>
+<tr>
+<td>Command+Shift + Z</td>
+<td>取消撤销</td>
+</tr>
+<tr>
+<td>Option + 左右方向键</td>
+<td>按单词移动光标</td>
+</tr>
+<tr>
+<td>Control + i</td>
+<td>自动整理所选择代码的格式</td>
+</tr>
+<tr>
+<td>Control + K</td>
+<td>删除本行剩余的字符</td>
+</tr>
+</tbody>
+</table>
+<h3 id="关于工程的快捷键"><a href="#关于工程的快捷键" class="headerlink" title="关于工程的快捷键"></a>关于工程的快捷键</h3><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command+R</td>
+<td>运行</td>
+</tr>
+<tr>
+<td>Command+.</td>
+<td>停止运行</td>
+</tr>
+<tr>
+<td>Command+B</td>
+<td>编译</td>
+</tr>
+<tr>
+<td>Command+Shift+K</td>
+<td>清除</td>
+</tr>
+</tbody>
+</table>
+<h3 id="关于调试的快捷键"><a href="#关于调试的快捷键" class="headerlink" title="关于调试的快捷键"></a>关于调试的快捷键</h3><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Command+ \</td>
+<td>在光标所在行添加断点</td>
+</tr>
+<tr>
+<td>Command+ Y</td>
+<td>撤销所有断点</td>
+</tr>
+<tr>
+<td>Command+点击</td>
+<td>快速跳转到相关文档</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Behavior"><a href="#Behavior" class="headerlink" title="Behavior"></a>Behavior</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><pre><code>Behavior ：让 Xcode 自动转换到我们想看到的界面。
+</code></pre><p>窗口界面如下所示。<br>在左侧你将看到所有事件集合,在右边是该事件可以触发的一些列动作。<br><img src="http://upload-images.jianshu.io/upload_images/965383-f8c041940aa02d29.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p> 可以让Xcode在不同时期显示不同的窗口状态。比如运行程序的时候,底部调试区随着 app 运行而出现，右边工具区隐藏。而停止运行的时候，调试区消失，工具区显示。<br> 现以<strong>运行APP时,底部调试区显示，右边工具区隐藏。而停止运行时，调试区消失，工具区显示</strong>为例设置步骤。</p>
+<h3 id="设置步骤"><a href="#设置步骤" class="headerlink" title="设置步骤"></a>设置步骤</h3><h4 id="在菜单栏选择Xcode-gt-点击Behavior-gt-Edit-Behavior…"><a href="#在菜单栏选择Xcode-gt-点击Behavior-gt-Edit-Behavior…" class="headerlink" title="在菜单栏选择Xcode -&gt; 点击Behavior -&gt; Edit Behavior…"></a>在菜单栏选择Xcode -&gt; 点击Behavior -&gt; Edit Behavior…</h4><h4 id="点击-Running-栏下的-Generates-output-具体设置如下窗口。"><a href="#点击-Running-栏下的-Generates-output-具体设置如下窗口。" class="headerlink" title="点击 Running 栏下的 Generates output,具体设置如下窗口。"></a>点击 Running 栏下的 Generates output,具体设置如下窗口。</h4><p><img src="http://upload-images.jianshu.io/upload_images/965383-a2ea8ccf384ffe2b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="点击-Running-栏下的-Completes-具体设置如下窗口。"><a href="#点击-Running-栏下的-Completes-具体设置如下窗口。" class="headerlink" title="点击 Running 栏下的 Completes,具体设置如下窗口。"></a>点击 Running 栏下的 Completes,具体设置如下窗口。</h4><p><img src="http://upload-images.jianshu.io/upload_images/965383-09e923b894a35a23.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>效果如下所示。<img src="http://upload-images.jianshu.io/upload_images/965383-5d6544a41e6080fa.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.cocoachina.com/ios/20140731/9284.html" target="_blank" rel="external">高效使用你的Xcode</a><br><a href="http://www.cocoachina.com/ios/20140127/7766.html" target="_blank" rel="external">一些Xcode 5的使用提示和技巧</a></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Xcode </tag>
+            
+            <tag> 技巧 </tag>
+            
+            <tag> 快捷 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Xcode调试技巧]]></title>
+      <url>/2016/04/08/Xcode%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7/</url>
+      <content type="html"><![CDATA[<h2 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h2><blockquote>
+<p>Xcode支持很多种不同类型的断点，包括普通断点、符号断点、异常断点、watch断点、OpenGL ES Error 断点和Test Failure 断点。(后两者不常用)</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="普通断点"><a href="#普通断点" class="headerlink" title="普通断点"></a>普通断点</h3><p> 下普通断点很简单，找到你要下断点的代码行，点击编辑区左边的行数处即可；或者使用快捷键直接command + \<br>  <img src="http://7xorl3.com1.z0.glb.clouddn.com/屏幕快照%202015-11-30%20上午9.29.03.png" alt=""><br>  <strong>特点： 当程序运行到此处的时候将会暂停</strong></p>
+<h3 id="符号断点"><a href="#符号断点" class="headerlink" title="符号断点"></a>符号断点</h3><p>符号断点其实就是对一个特定的函数/方法名下断点，在导航区选择断点tab页 -&gt; 点击最下面的加号 -&gt; Add Symbolic Breakpoint<br><img src="http://upload-images.jianshu.io/upload_images/965383-bbf439ec7c16d7dd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="http://upload-images.jianshu.io/upload_images/965383-0ff4163b92b0b5e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">   </p>
+<p><strong>设置符号断点可以输入类名+方法名，也可输入方法名，Xcode会自动匹配在不同类中同名的方法进行断点。</strong><br><img src="http://upload-images.jianshu.io/upload_images/965383-74a6c141eeddacb8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><strong>特点： 一旦所填写的方法被调用，就会暂停。</strong></p>
+<h3 id="异常断点"><a href="#异常断点" class="headerlink" title="异常断点"></a>异常断点</h3><p>异常断点在调试时如果程序抛出异常，导致程序退出，就会暂停。导航区 -&gt; 断点tab –&gt; 左下角加号 -&gt; Add Exception Breakpoint<br><img src="http://upload-images.jianshu.io/upload_images/965383-974d4e5648585a7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><strong>特点：  一旦程序异常就暂停，能立马定位问题，为比较常用的一种断点。</strong></p>
+<h3 id="watch断点"><a href="#watch断点" class="headerlink" title="watch断点"></a>watch断点</h3><p>watch断点就是当某个变量发生改变的时候触发的断点。在Xcode的watch窗口-&gt; 右键需要watch的变量 -&gt; watch “XXX”<br><img src="http://upload-images.jianshu.io/upload_images/965383-512b1bb7fcdf3630.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>当所watch的值发生变化时调试器会自动暂停。并打印信息<br><img src="http://upload-images.jianshu.io/upload_images/965383-b03f64b6e3bc3ce8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><strong>特点：  当要观察某个值是否发生变化，可使用watch断点</strong></p>
+<h3 id="其他断点-不常用"><a href="#其他断点-不常用" class="headerlink" title="其他断点(不常用)"></a>其他断点(不常用)</h3><p>OpenGL ES Error Breakpoint 以及 Test Failure Breakpoint<br>OpenGL ES Error Breakpoint ：主要是OpenGL ES的断点调试<br>Test Failure Breakpoint ：这个类型的断点会在test assertion 失败的时候暂停程序的执行。</p>
+<h3 id="编辑断点"><a href="#编辑断点" class="headerlink" title="编辑断点"></a>编辑断点</h3><p>右键普通断点 -&gt; Edit Breakpoint  添加条件<br><img src="http://upload-images.jianshu.io/upload_images/965383-c9d335bdaa88dd87.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="断点的属性以及说明"><a href="#断点的属性以及说明" class="headerlink" title="断点的属性以及说明"></a>断点的属性以及说明</h4><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Condition</td>
+<td>输入条件表达式，满足条件的时候断点就会生效。</td>
+</tr>
+<tr>
+<td>Ignore</td>
+<td>在这里可以设置忽略断点次数。</td>
+</tr>
+<tr>
+<td>Action</td>
+<td>一些断点触发时的操作。</td>
+</tr>
+<tr>
+<td>Options</td>
+<td>勾选Automatically continue after evaluating actions之后程序会在断点产生后继续运行。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="断点后的action"><a href="#断点后的action" class="headerlink" title="断点后的action"></a>断点后的action</h3><p>断点后的action，其实就是当断点被触发可以执行一些操作。右键断点 -&gt; Edit breakpoint -&gt; Add action   </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-882c23f45eadbd58.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">    </p>
+<p><strong>Action的类型很多，有Debugger Command、Log Message、Apple Script、Shell Command等，常用的有Debugger Command和Log Message</strong>  </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-869e813da1e09d68.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>Action对于调试是非常有用的，比如你需要在断点的地方频繁打印某一对象时，你不用新加log，然后重新编译，直接加一条Debugger Command就可以,下图为打印self.string信息<br><img src="http://upload-images.jianshu.io/upload_images/965383-a5d3640c8c4ced85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="用于action的Debugger-Command常用命令"><a href="#用于action的Debugger-Command常用命令" class="headerlink" title="用于action的Debugger Command常用命令"></a>用于action的Debugger Command常用命令</h4><h5 id="po命令-：-打印对象信息"><a href="#po命令-：-打印对象信息" class="headerlink" title="po命令 ： 打印对象信息"></a>po命令 ： 打印对象信息</h5><p><img src="http://upload-images.jianshu.io/upload_images/965383-a5d3640c8c4ced85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">   </p>
+<h5 id="expr命令：可以在调试时动态的执行表达式，同时打印出结果。常用来动态修改变量的值。"><a href="#expr命令：可以在调试时动态的执行表达式，同时打印出结果。常用来动态修改变量的值。" class="headerlink" title="expr命令：可以在调试时动态的执行表达式，同时打印出结果。常用来动态修改变量的值。"></a>expr命令：可以在调试时动态的执行表达式，同时打印出结果。常用来动态修改变量的值。</h5><p><img src="http://upload-images.jianshu.io/upload_images/965383-a047f4798189ec05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">   </p>
+<h5 id="call命令-动态调用函数，可以在不增加代码，不重新编译的情况下动态调用一个方法。"><a href="#call命令-动态调用函数，可以在不增加代码，不重新编译的情况下动态调用一个方法。" class="headerlink" title="call命令 :动态调用函数，可以在不增加代码，不重新编译的情况下动态调用一个方法。"></a>call命令 :动态调用函数，可以在不增加代码，不重新编译的情况下动态调用一个方法。</h5><p><img src="http://upload-images.jianshu.io/upload_images/965383-53429f6ae27575b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="UI调试"><a href="#UI调试" class="headerlink" title="UI调试"></a>UI调试</h2><h3 id="控件信息"><a href="#控件信息" class="headerlink" title="控件信息"></a>控件信息</h3><p>可以使用上述的po命令以及expr命令来查看、修改控件属性。</p>
+<h3 id="快速预览"><a href="#快速预览" class="headerlink" title="快速预览"></a>快速预览</h3><p>Xcode5之后支持在调试时对变量进行快速预览，调试时将鼠标放在变量上，然后点击快速预览按钮即可看到控件的显示。<br><img src="http://upload-images.jianshu.io/upload_images/965383-87b6282ae42d0eba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="查看整体UI层级结构"><a href="#查看整体UI层级结构" class="headerlink" title="查看整体UI层级结构"></a>查看整体UI层级结构</h3><p>点击在Xcode的watch窗口上方的debug view hierarchy 按钮<br><img src="http://upload-images.jianshu.io/upload_images/965383-fc302bca952c7750.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>之后便可以观察当前应用窗口的层级结构<br><img src="http://upload-images.jianshu.io/upload_images/965383-0effcae37015e2f0.gif?imageMogr2/auto-orient/strip" alt=""><br><strong><em>注意：在面板底部左侧有两个按钮。如下图所示，取消对这两个按钮的选定，否则会隐藏一些视图。</em></strong><br><img src="http://upload-images.jianshu.io/upload_images/965383-a113b76c20d4f939.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">  </p>
+<h4 id="探索视图层次"><a href="#探索视图层次" class="headerlink" title="探索视图层次"></a>探索视图层次</h4><p> 对于如何查看某个视图，可以选定查看的视图，然后观察跳转栏（Jump Bar）比如当选定最底部的视图，则Jump Bar显示<br> <img src="http://upload-images.jianshu.io/upload_images/965383-14a96a2c508b720f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br> 当各个视图之间间距太小，可以使用左下方的slider来控制视图间的间距.<br> 同时若滚动右下方的滑块，则可以隐藏不同层次的视图<br> <img src="http://upload-images.jianshu.io/upload_images/965383-d08966dcbde4e398.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<h4 id="查看视图"><a href="#查看视图" class="headerlink" title="查看视图"></a>查看视图</h4><p>按下cmd + 6 调出导航栏的Debug navigator，选定要查看的视图。或者直接在编辑区选定。<br> <img src="http://upload-images.jianshu.io/upload_images/965383-2a43ff1524b5cb24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>接着使用cmd + option + 4打开工具区的Size Inspector，便可查看该视图的边界、位置、锚点以及Auto Layout约束列表。<br> <img src="http://upload-images.jianshu.io/upload_images/965383-2fd70cdea0b07365.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>也可以通过cmd + option + 3切换至Object inspector。你会看到一个选定对象的各项信息，比如背景颜色，tag等等。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><strong>本篇为作者认为常用的一些调试方法，若想深入了解，可以查阅以下参考文档。其次若有不足可以指出、探讨。</strong></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&amp;mid=207173736&amp;idx=1&amp;sn=bb26dea65dd3adae91fb587c97aa8f95&amp;scene=23&amp;srcid=1127Pjiya1deGMhUPCz66xtI#rd" target="_blank" rel="external">Xcode基本使用及调试技巧</a><br><a href="http://www.cocoachina.com/ios/20150805/12842.html" target="_blank" rel="external">只会左键断点？是时候试试这样那样断点了</a><br><a href="http://www.mamicode.com/info-detail-963932.html" target="_blank" rel="external">breakpoints、lldb 和 chisel 的详解</a><br><a href="http://www.cocoachina.com/ios/20150423/11658.html" target="_blank" rel="external">详解Xcode 6的视图调试</a></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Xcode </tag>
+            
+            <tag> debug </tag>
+            
+        </tags>
+        
+    </entry>
+    
+  
+  
+</search>

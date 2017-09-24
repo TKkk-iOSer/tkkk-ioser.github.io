@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Xcode," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Xcode常用的第三方插件Xcode 所有的插件都安装在目录~/Library/Application Support/Developer/Shared/Xcode/Plug-ins/下，每个插件为一个子目录，你也可以手工切换到这个目录来增加或删除插件。">
+<meta name="keywords" content="Xcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xcode中常用的第三方插件和小工具">
+<meta property="og:url" content="http://yoursite.com/2016/07/07/Xcode中常用的第三方插件和小工具/index.html">
+<meta property="og:site_name" content="TKkk Notes">
+<meta property="og:description" content="Xcode常用的第三方插件Xcode 所有的插件都安装在目录~/Library/Application Support/Developer/Shared/Xcode/Plug-ins/下，每个插件为一个子目录，你也可以手工切换到这个目录来增加或删除插件。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-eb0f22ebef8b5c37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-6de64d96e1ddc69d.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-b9eefe7a5fc32622.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-126a78759aaf7e86.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-e8316c0b7f831af1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-d90284b354f6e17e.jpg?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="https://raw.githubusercontent.com/EnjoySR/ESJsonFormat-Xcode/master/ScreenShot/ScreenShot3.gif">
+<meta property="og:image" content="https://github.com/kattrali/deriveddata-exterminator/raw/master/docs/menu.png">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-fc2b1d808f209706.gif?imageMogr2/auto-orient/strip">
+<meta property="og:image" content="https://camo.githubusercontent.com/c354bf04524df86daeabe7a6d2b9926fac790f85/68747470733a2f2f7261772e6769746875622e636f6d2f6b7375746865722f4b53496d6167654e616d65642d58636f64652f6d61737465722f73637265656e73686f742e676966">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-c901731e1fe60286.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-b7d8df1fbc7e443e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-bc39fd4777f1f886.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-d880dc98c8a71d21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-78ad214b9ee47346.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-b2fa27729d466318.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-7c86e73066bef7f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-00c762a8a2f5b296.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-2f1c12512d585e5e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://7xorl3.com1.z0.glb.clouddn.com/屏幕快照%202015-12-16%20上午10.09.50.png">
+<meta property="og:updated_time" content="2017-09-24T12:16:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Xcode中常用的第三方插件和小工具">
+<meta name="twitter:description" content="Xcode常用的第三方插件Xcode 所有的插件都安装在目录~/Library/Application Support/Developer/Shared/Xcode/Plug-ins/下，每个插件为一个子目录，你也可以手工切换到这个目录来增加或删除插件。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/965383-eb0f22ebef8b5c37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"ralways","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/07/Xcode中常用的第三方插件和小工具/"/>
+
+
+
+
+
+  <title>Xcode中常用的第三方插件和小工具 | TKkk Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">TKkk Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/07/Xcode中常用的第三方插件和小工具/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="TKkk">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TKkk Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Xcode中常用的第三方插件和小工具</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-07T17:24:32+08:00">
+                2016-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Xcode常用的第三方插件"><a href="#Xcode常用的第三方插件" class="headerlink" title="Xcode常用的第三方插件"></a>Xcode常用的第三方插件</h2><pre><code>Xcode 所有的插件都安装在目录~/Library/Application Support/Developer/Shared/Xcode/Plug-ins/下，每个插件为一个子目录，你也可以手工切换到这个目录来增加或删除插件。
+</code></pre><a id="more"></a>
+<h3 id="Alcatraz-–-管理Xcode插件的Xcode插件"><a href="#Alcatraz-–-管理Xcode插件的Xcode插件" class="headerlink" title="Alcatraz – 管理Xcode插件的Xcode插件"></a>Alcatraz – 管理Xcode插件的Xcode插件</h3><p>Alcatraz 是一个开源的 Xcode 包管理器。可让你发现和安装插件、模版和颜色方案，无需手工克隆和拷贝文件。</p>
+<p>项目地址：<a href="https://github.com/alcatraz/Alcatraz" target="_blank" rel="external">https://github.com/alcatraz/Alcatraz</a></p>
+<p>位置:   </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-eb0f22ebef8b5c37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><strong>以下的插件均可以通过Alcatraz来查找安装，也可以根据项目地址下载到本地安装</strong>   </p>
+<hr>
+<h3 id="FuzzyAutocompletePlugin-–-代码自动补全插件"><a href="#FuzzyAutocompletePlugin-–-代码自动补全插件" class="headerlink" title="FuzzyAutocompletePlugin – 代码自动补全插件"></a>FuzzyAutocompletePlugin – 代码自动补全插件</h3><p>FuzzyAutocompletePlugin是一个Xcode兼容的插件，通过添加模糊匹配来提高Xcode代码自动补全功能，开发者无需遵循从头匹配的原则，只要记得方法里某个关键字即可进行匹配，很好地提高了工作效率。   </p>
+<p>项目地址：<a href="https://github.com/chendo/FuzzyAutocompletePlugin" target="_blank" rel="external">https://github.com/chendo/FuzzyAutocompletePlugin</a></p>
+<p>效果 ：<br><img src="http://upload-images.jianshu.io/upload_images/965383-6de64d96e1ddc69d.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<hr>
+<h3 id="VVDocumenter-Xcode-–-规范注释生成器"><a href="#VVDocumenter-Xcode-–-规范注释生成器" class="headerlink" title="VVDocumenter-Xcode – 规范注释生成器"></a>VVDocumenter-Xcode – 规范注释生成器</h3><p>VVDocumenter-Xcode是一款快速生成规范化注释的插件，只需要输入三个斜线“///”，即可生成规范化注释。<br>项目地址：<a href="https://github.com/onevcat/VVDocumenter-Xcode" target="_blank" rel="external">https://github.com/onevcat/VVDocumenter-Xcode</a></p>
+<p>效果：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-b9eefe7a5fc32622.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<hr>
+<h3 id="CocoaPods-for-Xcode-–-CocoaPods图形显示插件"><a href="#CocoaPods-for-Xcode-–-CocoaPods图形显示插件" class="headerlink" title="CocoaPods for Xcode – CocoaPods图形显示插件"></a>CocoaPods for Xcode – CocoaPods图形显示插件</h3><p>该CocoaPods的插件增加了一个CocoaPods菜单到Xcode的产品菜单。可以不用通过命令行而进行CocoaPods的操作。</p>
+<p>项目地址：<a href="https://github.com/kattrali/cocoapods-xcode-plugin" target="_blank" rel="external">https://github.com/kattrali/cocoapods-xcode-plugin</a></p>
+<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/965383-126a78759aaf7e86.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<pre><code>若是出现 the command path could not be resolved 错误，可以在终端使用dirname `which pod` 命令,将CocoaPods的路径拷贝到上图的GEM_PATH中
+</code></pre><hr>
+<h3 id="ZLGotoSandboxPlugin-Xcode-–-项目沙盒路径插件"><a href="#ZLGotoSandboxPlugin-Xcode-–-项目沙盒路径插件" class="headerlink" title="ZLGotoSandboxPlugin-Xcode – 项目沙盒路径插件"></a>ZLGotoSandboxPlugin-Xcode – 项目沙盒路径插件</h3><p>该插件用于在Xcode菜单中快捷打开项目沙盒路径</p>
+<p>项目地址：<a href="https://github.com/MakeZL/ZLGotoSandboxPlugin" target="_blank" rel="external">https://github.com/MakeZL/ZLGotoSandboxPlugin</a></p>
+<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/965383-e8316c0b7f831af1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<hr>
+<h3 id="BBUDebuggerTuckAway-–-自动隐藏Debugger的Xcode插件"><a href="#BBUDebuggerTuckAway-–-自动隐藏Debugger的Xcode插件" class="headerlink" title="BBUDebuggerTuckAway – 自动隐藏Debugger的Xcode插件"></a>BBUDebuggerTuckAway – 自动隐藏Debugger的Xcode插件</h3><p>BBUDebuggerTuckAway是一款支持自动隐藏Debugger的Xcode插件，其开发者为来自德国柏林Contentful GmbH公司的Boris Bügling。使用BBUDebuggerTuckAway，开发者能够实现在编辑代码时，自动隐藏底部的调试栏。</p>
+<p>项目地址：<a href="https://github.com/neonichu/BBUDebuggerTuckAway" target="_blank" rel="external">https://github.com/neonichu/BBUDebuggerTuckAway</a></p>
+<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/965383-d90284b354f6e17e.jpg?imageMogr2/auto-orient/strip" alt=""></p>
+<hr>
+<h3 id="ESJsonFormat-Xcode-–-JSON转换模型的插件"><a href="#ESJsonFormat-Xcode-–-JSON转换模型的插件" class="headerlink" title="ESJsonFormat-Xcode – JSON转换模型的插件"></a>ESJsonFormat-Xcode – JSON转换模型的插件</h3><p>ESJsonFormat-Xcode 是 一款将JSON格式化输出为模型的属性的插件。<br>需要注意的几点：<br>1.JSON中的key对应的value为Null的话会格式化成NSString类型<br>2.格式化之前光标放在你需要添加属性的地方<br>3.如果不输出到文件，RootClass需要自己手动创建，插件只负责RootClass里面的属性生成<br>4.生成的 MJExtension 框架中objectClassInArray方法(类方法)<br>项目地址：<a href="https://github.com/EnjoySR/ESJsonFormat-Xcode" target="_blank" rel="external">https://github.com/EnjoySR/ESJsonFormat-Xcode</a>  </p>
+<p>效果：<br><img src="https://raw.githubusercontent.com/EnjoySR/ESJsonFormat-Xcode/master/ScreenShot/ScreenShot3.gif" alt=""></p>
+<hr>
+<h3 id="deriveddata-exterminator-–-清除-Xcode-缓存目录的插件"><a href="#deriveddata-exterminator-–-清除-Xcode-缓存目录的插件" class="headerlink" title="deriveddata-exterminator – 清除 Xcode 缓存目录的插件"></a>deriveddata-exterminator – 清除 Xcode 缓存目录的插件</h3><p>有些时候 Xcode 会出各种奇怪的问题，最常见的是在某些复杂操作下（例如同一个项目，来回切换到各种分支版本），会造成 Xcode 显示一些编译的错误或警告，但是最终却又可以编译通过。而这时候通常清除 Xcode 缓存就可以解决这类问题。该插件在 Xcode 菜单上增加了一个清除缓存按钮，可以一键方便地清楚缓存内容。</p>
+<p>项目地址：<a href="https://github.com/kattrali/deriveddata-exterminator" target="_blank" rel="external">https://github.com/kattrali/deriveddata-exterminator</a></p>
+<p>按钮位置：<br><img src="https://github.com/kattrali/deriveddata-exterminator/raw/master/docs/menu.png" alt=""></p>
+<hr>
+<h3 id="SCXcodeSwitchExpander-–-自动填充Switch语句枚举值的插件"><a href="#SCXcodeSwitchExpander-–-自动填充Switch语句枚举值的插件" class="headerlink" title="SCXcodeSwitchExpander – 自动填充Switch语句枚举值的插件"></a>SCXcodeSwitchExpander – 自动填充Switch语句枚举值的插件</h3><p>SCXcodeSwitchExpander插件帮助你迅速地在switch语句中填充枚举类型的每种可能的取值。<br>例如，当你输入switch，然后键入一个NSTableViewAnimationOptions类时，该插件会将其可能的取值补全在每一个case之后。</p>
+<p>项目地址： <a href="https://github.com/stefanceriu/SCXcodeSwitchExpander" target="_blank" rel="external">https://github.com/stefanceriu/SCXcodeSwitchExpander</a></p>
+<p>效果：<br><img src="http://upload-images.jianshu.io/upload_images/965383-fc2b1d808f209706.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<hr>
+<h3 id="KSImageNamed-Xcode-–-UIImage的imageNamed文件名补全插件"><a href="#KSImageNamed-Xcode-–-UIImage的imageNamed文件名补全插件" class="headerlink" title="KSImageNamed-Xcode – UIImage的imageNamed文件名补全插件"></a>KSImageNamed-Xcode – UIImage的imageNamed文件名补全插件</h3><p>KSImageNamed-Xcode为项目中使用的UIImage的imageNamed提供文件名自动补全功能。使用[UIImage imageNamed:@”xxx”]时，该插件会扫描整个workspace中的图片文件。并且显示选中图片的缩略图</p>
+<p>项目地址： <a href="https://github.com/ksuther/KSImageNamed-Xcode" target="_blank" rel="external">https://github.com/ksuther/KSImageNamed-Xcode</a></p>
+<p>效果 ：</p>
+<p><img src="https://camo.githubusercontent.com/c354bf04524df86daeabe7a6d2b9926fac790f85/68747470733a2f2f7261772e6769746875622e636f6d2f6b7375746865722f4b53496d6167654e616d65642d58636f64652f6d61737465722f73637265656e73686f742e676966" alt="">   </p>
+<hr>
+<h2 id="Xcode中的小工具-Xcode版本：7-1-1-7B1005"><a href="#Xcode中的小工具-Xcode版本：7-1-1-7B1005" class="headerlink" title="Xcode中的小工具(Xcode版本：7.1.1 (7B1005))"></a>Xcode中的小工具(Xcode版本：7.1.1 (7B1005))</h2><pre><code>主要介绍Xcode-Window中的工具
+</code></pre><hr>
+<h3 id="Devices"><a href="#Devices" class="headerlink" title="Devices"></a>Devices</h3><p><img src="http://upload-images.jianshu.io/upload_images/965383-c901731e1fe60286.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>Devices中主要显示当前Mac、模拟器、连接的iPhone设备中的信息，包括设备名、版本、标识符等信息。iPhone设备的话还有显示所安装的App信息(App仅包含调试、越狱的App)。包括App名称、App版本、App标识。<strong>iPhone中的identifier就是UDID</strong></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-b7d8df1fbc7e443e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Devices.png"></p>
+<p>同时选定某个App，在下方可以进行删除、查看沙盒等操作。<br><img src="http://upload-images.jianshu.io/upload_images/965383-bc39fd4777f1f886.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<hr>
+<h3 id="Organizer"><a href="#Organizer" class="headerlink" title="Organizer"></a>Organizer</h3><h4 id="Archives"><a href="#Archives" class="headerlink" title="Archives"></a>Archives</h4><p>Archives 主要用于提交App到AppStore审核和提取企业包/Ad hoc 包。界面如下所示：   </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-d880dc98c8a71d21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>若要提交AppStore审核选择 <code>Upload to App Store…</code> ,接着根据提示填写即可。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-78ad214b9ee47346.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>若要打包选择<code>Export…</code>，选择所要打的类型的包，包括企业、AD hoc，接着 Next ，按要求选择账号，然后继续即可，最后就是导出ipa了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-b2fa27729d466318.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="Crashes"><a href="#Crashes" class="headerlink" title="Crashes"></a>Crashes</h4><p>苹果用来收集用户手机中当前应用的崩溃报告。<br>但需要注意的是这里只是一部分的数据，举例来说如果你看到的崩溃是10次，但是可能苹果只收集了20%的用户信息。所以你可以大概估计应该是10*5=50次崩溃。<br>可以在左侧选择你要查看崩溃信息的发布版本.<br><img src="http://upload-images.jianshu.io/upload_images/965383-7c86e73066bef7f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>在崩溃信息这一栏苹果会按照崩溃数量排序，将崩溃数量最多的排在最前。右侧的详细信息会显示是崩溃时的调用堆栈，可以看到是哪行代码导致的崩溃。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-00c762a8a2f5b296.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>若想定位到崩溃的那行代码，可以选中要解决的崩溃后，在窗口右侧选择open in project。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/965383-2f1c12512d585e5e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="Projects"><a href="#Projects" class="headerlink" title="Projects"></a>Projects</h4><p>此工具主要用于查看工程的路径和相应缓存数据的路径<br><img src="http://7xorl3.com1.z0.glb.clouddn.com/屏幕快照%202015-12-16%20上午10.09.50.png" alt=""></p>
+<hr>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.zhihu.com/question/24859067" target="_blank" rel="external">大家用xcode开发的时候都会用到什么插件</a><br><a href="http://www.csdn.net/article/2014-05-04/2819586-the-best-xcode-plugins/1" target="_blank" rel="external">盘点开发者最喜爱的十大开源Xcode插件</a><br><a href="http://www.cocoachina.com/industry/20130918/7022.html" target="_blank" rel="external">那些不能错过的Xcode插件</a><br><a href="http://www.cocoachina.com/ios/20151020/13794.html" target="_blank" rel="external">Xcode7中你一定要知道的炸裂调试神技</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+      
+        
+
+<div style="text-align:center;color: #ccc;font-size:14px;">
+------------------------------------ 我是有底线的 ------------------------------------</div>
+
+
+      
+    </div>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Xcode/" rel="tag"># Xcode</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/08/Instrument介绍-Xcode源码版本控制的使用/" rel="next" title="Instrument介绍、Xcode源码版本控制的使用">
+                <i class="fa fa-chevron-left"></i> Instrument介绍、Xcode源码版本控制的使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/19/逆向-微信helloWorld/" rel="prev" title="iOS逆向-微信helloWorld">
+                iOS逆向-微信helloWorld <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/avatar.jpg"
+              alt="TKkk" />
+          
+            <p class="site-author-name" itemprop="name">TKkk</p>
+            <p class="site-description motion-element" itemprop="description">只是做了一些微小的事情</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/TKkk-iOSer" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:tkkk14@qq.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Xcode常用的第三方插件"><span class="nav-number">1.</span> <span class="nav-text">Xcode常用的第三方插件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Alcatraz-–-管理Xcode插件的Xcode插件"><span class="nav-number">1.1.</span> <span class="nav-text">Alcatraz – 管理Xcode插件的Xcode插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FuzzyAutocompletePlugin-–-代码自动补全插件"><span class="nav-number">1.2.</span> <span class="nav-text">FuzzyAutocompletePlugin – 代码自动补全插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VVDocumenter-Xcode-–-规范注释生成器"><span class="nav-number">1.3.</span> <span class="nav-text">VVDocumenter-Xcode – 规范注释生成器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CocoaPods-for-Xcode-–-CocoaPods图形显示插件"><span class="nav-number">1.4.</span> <span class="nav-text">CocoaPods for Xcode – CocoaPods图形显示插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZLGotoSandboxPlugin-Xcode-–-项目沙盒路径插件"><span class="nav-number">1.5.</span> <span class="nav-text">ZLGotoSandboxPlugin-Xcode – 项目沙盒路径插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BBUDebuggerTuckAway-–-自动隐藏Debugger的Xcode插件"><span class="nav-number">1.6.</span> <span class="nav-text">BBUDebuggerTuckAway – 自动隐藏Debugger的Xcode插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ESJsonFormat-Xcode-–-JSON转换模型的插件"><span class="nav-number">1.7.</span> <span class="nav-text">ESJsonFormat-Xcode – JSON转换模型的插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deriveddata-exterminator-–-清除-Xcode-缓存目录的插件"><span class="nav-number">1.8.</span> <span class="nav-text">deriveddata-exterminator – 清除 Xcode 缓存目录的插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SCXcodeSwitchExpander-–-自动填充Switch语句枚举值的插件"><span class="nav-number">1.9.</span> <span class="nav-text">SCXcodeSwitchExpander – 自动填充Switch语句枚举值的插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KSImageNamed-Xcode-–-UIImage的imageNamed文件名补全插件"><span class="nav-number">1.10.</span> <span class="nav-text">KSImageNamed-Xcode – UIImage的imageNamed文件名补全插件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Xcode中的小工具-Xcode版本：7-1-1-7B1005"><span class="nav-number">2.</span> <span class="nav-text">Xcode中的小工具(Xcode版本：7.1.1 (7B1005))</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Devices"><span class="nav-number">2.1.</span> <span class="nav-text">Devices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Organizer"><span class="nav-number">2.2.</span> <span class="nav-text">Organizer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Archives"><span class="nav-number">2.2.1.</span> <span class="nav-text">Archives</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Crashes"><span class="nav-number">2.2.2.</span> <span class="nav-text">Crashes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Projects"><span class="nav-number">2.2.3.</span> <span class="nav-text">Projects</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">TKkk</span>
+
+  
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
