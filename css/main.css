@@ -1826,7 +1826,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff59ff;
+  background: #2affbf;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2605,6 +2605,7 @@ pre .javascript .function {
   line-height: 36px;
   font-size: 50px;
   font-weight: normal;
+  color: #888;
   font-family: 'consolas', 'Monaco', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 embed {
