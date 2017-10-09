@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-bd6a3a36c065a8b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-3ca5031305263ca2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/965383-30cbea645661e627.gif?imageMogr2/auto-orient/strip">
-<meta property="og:updated_time" content="2017-09-25T05:18:58.000Z">
+<meta property="og:updated_time" content="2017-10-09T09:21:47.094Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macOS逆向-微信小助手">
 <meta name="twitter:description" content="前言前一阵子入了 iOS 逆向的坑，整了个微信机器人，不过由于是用自己的证书打包，因此只能用7天，之后还得重新打包，实在麻烦。于是就拿 macOS 动刀了。    本篇主要制作 macOS 版微信的插件，实现消息防撤回的功能，从而熟悉 mac OS 插件制作,由于 (lan ai) macOS 逆向分析与 iOS 类似，且不像 iOS 有那么多的工具，因此花费的时间较多，这里暂不阐述。之后有时间再">
@@ -354,8 +354,8 @@
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前一阵子入了 <a href="http://www.jianshu.com/p/04495a429324" target="_blank" rel="external">iOS 逆向</a>的坑，整了个微信机器人，不过由于是用自己的证书打包，因此只能用7天，之后还得重新打包，实在麻烦。于是就拿 macOS 动刀了。   </p>
 <p>本篇主要制作 macOS 版微信的插件，实现<strong>消息防撤回</strong>的功能，从而熟悉 mac OS 插件制作,由于 <del>(lan ai)</del> macOS 逆向分析与 iOS 类似，且不像 iOS 有那么多的工具，因此花费的时间较多，这里暂不阐述。<del>之后有时间再整理 iOS 逆向分析过程。</del><br><a id="more"></a></p>
 <ul>
-<li>基本原理：与 iOS 注入动态库类似，通过 app 启动时调用我们注入的库，从而进行 hook。</li>
-<li>插件 GitHub 地址:<a href="https://github.com/tusiji7/WeChatPlugin" target="_blank" rel="external">WeChatPlugin-MacOS</a></li>
+<li>基本原理: 与 iOS 注入动态库类似，通过 app 启动时调用我们注入的库，从而进行 hook。</li>
+<li>插件 GitHub 地址: <a href="https://github.com/tusiji7/WeChatPlugin" target="_blank" rel="external">WeChatPlugin-MacOS</a></li>
 </ul>
 <hr>
 <h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><ul>
