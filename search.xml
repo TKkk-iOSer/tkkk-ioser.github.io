@@ -3,9 +3,9 @@
   
     
     <entry>
-      <title><![CDATA[iOS逆向-自动验证好友请求]]></title>
-      <url>/2017/09/26/iOS%E9%80%86%E5%90%91-%E8%87%AA%E5%8A%A8%E9%AA%8C%E8%AF%81%E5%A5%BD%E5%8F%8B%E8%AF%B7%E6%B1%82/</url>
-      <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上次完成了 macOS 版微信小助手，现在终于有(xian)时(de)间(huang)来说说 iOS 逆向了。本篇主要实现在微信上自动验证好友请求，从而熟悉 iOS 逆向分析的过程，可能总结的有点粗糙，如果不懂的地方欢迎探讨。</p>
+      <title><![CDATA[iOS逆向-微信自动添加好友]]></title>
+      <url>/2017/09/26/iOS%E9%80%86%E5%90%91-%E5%BE%AE%E4%BF%A1%E8%87%AA%E5%8A%A8%E6%B7%BB%E5%8A%A0%E5%A5%BD%E5%8F%8B/</url>
+      <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上次完成了 macOS 版微信小助手，现在终于有(xian)时(de)间(huang)来说说 iOS 逆向了。本篇主要实现在微信上自动添加好友(即自动验证新的朋友申请)，从而熟悉 iOS 逆向分析的过程，可能总结的有点粗糙，如果不懂的地方欢迎探讨。</p>
 <p>github地址: <a href="https://github.com/TKkk-iOSer/WeChatPlugin-iOS" target="_blank" rel="noopener">iOS 版微信小助手(防撤回、修改微信运动、群管理、好友请求管理)</a></p>
 <h2 id=""><a href="#" class="headerlink" title=""></a><a id="more"></a></h2><h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><p>以下工具的详细使用方法可以查看<a href="https://book.douban.com/subject/26363333/" target="_blank" rel="noopener">iOS应用逆向工程 第2版</a> 第二部分 工具篇。</p>
 <h3 id="macbook-软件"><a href="#macbook-软件" class="headerlink" title="macbook 软件"></a>macbook 软件</h3><ul>
