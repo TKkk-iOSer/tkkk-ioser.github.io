@@ -69,7 +69,7 @@
 
 
 
-<meta name="description" content="前言前一阵子入了 iOS 逆向的坑，整了个微信机器人，不过由于是用自己的证书打包，因此只能用7天，之后还得重新打包，实在麻烦。于是就拿 macOS 动刀了。    本篇主要制作 macOS 版微信的插件，实现消息防撤回的功能，从而熟悉 mac OS 插件制作,由于 (lan ai) macOS 逆向分析与 iOS 类似，且不像 iOS 有那么多的工具，因此花费的时间较多，这里暂不阐述。之后有时间再">
+<meta name="description" content="前言前一阵子入了 iOS 逆向的坑，整了个微信机器人，不过由于是用自己的证书打包，因此只能用7天，之后还得重新打包，实在麻烦。于是就拿 macOS 动刀了。    本篇主要制作 macOS 版微信的插件，实现消息防撤回的功能，从而熟悉 mac OS 插件制作,由于 (lan ai) macOS 逆向分析与 iOS 类似">
 <meta name="keywords" content="逆向,微信,macOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macOS逆向-微信小助手">
@@ -471,6 +471,35 @@
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>听说你想请我喝下午茶？😏</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="TKkk 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="TKkk 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
 
     
     <div>
@@ -513,6 +542,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/26/iOS逆向-自动验证好友请求/" rel="prev" title="iOS逆向-自动验证好友请求">
+                iOS逆向-自动验证好友请求 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -592,7 +625,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
